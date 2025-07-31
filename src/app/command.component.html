@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <!-- * * * * * * * * * * * The content below * * * * * * * * * * * * * -->
 <div class="d-flex min-vh-100 bg-light px-4">
   <!-- Bloc gauche (30%) -->
@@ -9,30 +10,30 @@
       </div>
       <div class="card-body">
         <!-- Formulaire en 3 étapes -->
-        <form>
+        <form (submit)="onSubmitForm($event)">
           <!-- Étape 1 : Informations client et contact -->
           @if (step === 1) {
           <div id="step1">
             <h5 class="mb-3">1. Informations client</h5>
             <div class="mb-3">
               <label for="clientName" class="form-label">Nom du client</label>
-              <input type="text" id="clientName" name="clientName" class="form-control" required>
+              <input type="text" id="clientName" name="clientName" class="form-control" required [(ngModel)]="formData.clientName">
             </div>
             <div class="mb-3">
               <label for="platform" class="form-label">Plateforme de contact</label>
-              <input type="text" id="platform" name="platform" class="form-control">
+              <input type="text" id="platform" name="platform" class="form-control" [(ngModel)]="formData.platform">
             </div>
             <div class="mb-3">
               <label for="contactDate" class="form-label">Date de prise de contact</label>
-              <input type="date" id="contactDate" name="contactDate" class="form-control">
+              <input type="date" id="contactDate" name="contactDate" class="form-control" [(ngModel)]="formData.contactDate">
             </div>
             <div class="mb-3">
               <label for="comments" class="form-label">Commentaires</label>
-              <textarea id="comments" name="comments" class="form-control" rows="2"></textarea>
+              <textarea id="comments" name="comments" class="form-control" rows="2" [(ngModel)]="formData.comments"></textarea>
             </div>
             <div class="mb-3">
               <label for="phone" class="form-label">Numéro de téléphone</label>
-              <input type="tel" id="phone" name="phone" class="form-control" pattern="^(\+?\d{1,3}[- ]?)?\d{6,14}$">
+              <input type="tel" id="phone" name="phone" class="form-control" pattern="^(\+?\d{1,3}[- ]?)?\d{6,14}$" [(ngModel)]="formData.phone">
             </div>
             <div class="d-grid">
               <button type="button" class="btn btn-primary btn-lg" (click)="nextStep()">Suivant</button>
@@ -45,27 +46,27 @@
             <h5 class="mb-3">2. Détails de la commande</h5>
             <div class="mb-3">
               <label for="color" class="form-label">Couleur souhaitée</label>
-              <input type="text" id="color" name="color" class="form-control">
+              <input type="text" id="color" name="color" class="form-control" [(ngModel)]="formData.color">
             </div>
             <div class="mb-3">
               <label for="unitPrice" class="form-label">Prix unitaire (€)</label>
-              <input type="number" id="unitPrice" name="unitPrice" class="form-control" min="0" step="0.01">
+              <input type="number" id="unitPrice" name="unitPrice" class="form-control" min="0" step="0.01" [(ngModel)]="formData.unitPrice">
             </div>
             <div class="mb-3">
               <label for="quantity" class="form-label">Quantité</label>
-              <input type="number" id="quantity" name="quantity" class="form-control" min="1" required>
+              <input type="number" id="quantity" name="quantity" class="form-control" min="1" required [(ngModel)]="formData.quantity">
             </div>
             <div class="mb-3">
               <label for="fireFee" class="form-label">Frais de feu (€)</label>
-              <input type="number" id="fireFee" name="fireFee" class="form-control" min="0" step="0.01">
+              <input type="number" id="fireFee" name="fireFee" class="form-control" min="0" step="0.01" [(ngModel)]="formData.fireFee">
             </div>
             <div class="mb-3">
               <label for="shippingFee" class="form-label">Frais de livraison/retour (€)</label>
-              <input type="number" id="shippingFee" name="shippingFee" class="form-control" min="0" step="0.01">
+              <input type="number" id="shippingFee" name="shippingFee" class="form-control" min="0" step="0.01" [(ngModel)]="formData.shippingFee">
             </div>
             <div class="mb-3">
               <label for="deliveryDate" class="form-label">Date de livraison souhaitée</label>
-              <input type="date" id="deliveryDate" name="deliveryDate" class="form-control">
+              <input type="date" id="deliveryDate" name="deliveryDate" class="form-control" [(ngModel)]="formData.deliveryDate">
             </div>
             <div class="d-flex justify-content-between">
               <button type="button" class="btn btn-secondary" (click)="prevStep()">Précédent</button>
@@ -79,11 +80,11 @@
             <h5 class="mb-3">3. Paiement et retour</h5>
             <div class="mb-3">
               <label for="advance" class="form-label">Avance perçue (€)</label>
-              <input type="number" id="advance" name="advance" class="form-control" min="0" step="0.01">
+              <input type="number" id="advance" name="advance" class="form-control" min="0" step="0.01" [(ngModel)]="formData.advance" placeholder="Ex: 50">
             </div>
             <div class="mb-3">
               <label for="returnStatus" class="form-label">Retour effectué</label>
-              <select id="returnStatus" name="returnStatus" class="form-select">
+              <select id="returnStatus" name="returnStatus" class="form-select" [(ngModel)]="formData.returnStatus">
                 <option value="">Sélectionner</option>
                 <option value="oui">Oui</option>
                 <option value="non">Non</option>
@@ -91,12 +92,25 @@
             </div>
             <div class="mb-3">
               <label for="deposit" class="form-label">Montant de la caution (€)</label>
-              <input type="number" id="deposit" name="deposit" class="form-control" min="0" step="0.01">
+              <input type="number" id="deposit" name="deposit" class="form-control" min="0" step="0.01" [(ngModel)]="formData.deposit">
             </div>
             <div class="d-flex justify-content-between">
               <button type="button" class="btn btn-secondary" (click)="prevStep()">Précédent</button>
-              <button type="submit" class="btn btn-success btn-lg">Enregistrer la demande</button>
+              <button type="submit" class="btn btn-success btn-lg" [disabled]="isSubmitting">
+                @if (isSubmitting) {
+                  <output class="spinner-border spinner-border-sm me-2" aria-hidden="true"></output>
+                }
+                {{ isSubmitting ? 'Enregistrement...' : 'Enregistrer la demande' }}
+              </button>
             </div>
+            <!-- Message de feedback -->
+            @if (submitMessage) {
+              <div class="mt-3 alert" 
+                   [class.alert-success]="submitMessage.includes('succès')" 
+                   [class.alert-danger]="!submitMessage.includes('succès')">
+                {{ submitMessage }}
+              </div>
+            }
           </div>
           }
         </form>
