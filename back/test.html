@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test API Backend</title>
+</head>
+<body>
+    <h1>Test de l'API Backend</h1>
+    
+    <div>
+        <h2>Test de l'endpoint /api/test</h2>
+        <button onclick="testAPI()">Tester l'API</button>
+        <div id="apiResult"></div>
+    </div>
+    
+    <div>
+        <h2>Test d'envoi de demande</h2>
+        <button onclick="testSubmit()">Envoyer une demande test</button>
+        <div id="submitResult"></div>
+    </div>
+    
+    <div>
+        <h2>Récupérer toutes les demandes</h2>
+        <button onclick="getAllDemandes()">Récupérer les demandes</button>
+        <div id="demandesResult"></div>
+    </div>
+
+    <script>
+        async function testAPI() {
+            try {
+                const response = await fetch('http://localhost:3001/api/test');
+                const data = await response.json();
+                document.getElementById('apiResult').innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            } catch (error) {
+                document.getElementById('apiResult').innerHTML = `<p style="color: red;">Erreur: ${error.message}</p>`;
+            }
+        }
+        
+        async function testSubmit() {
+            const testData = {
+                clientName: "Client Test",
+                platform: "Web",
+                contactDate: "2025-08-01",
+                comments: "Test depuis la page de test",
+                phone: "0123456789",
+                color: "Bleu",
+                unitPrice: 25.50,
+                quantity: 2,
+                fireFee: 10.00,
+                shippingFee: 15.00,
+                deliveryDate: "2025-08-05",
+                advance: 50.00,
+                returnStatus: "non",
+                deposit: 100.00
+            };
+            
+            try {
+                const response = await fetch('http://localhost:3001/api/demandes', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(testData)
+                });
+                const data = await response.json();
+                document.getElementById('submitResult').innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            } catch (error) {
+                document.getElementById('submitResult').innerHTML = `<p style="color: red;">Erreur: ${error.message}</p>`;
+            }
+        }
+        
+        async function getAllDemandes() {
+            try {
+                const response = await fetch('http://localhost:3001/api/demandes');
+                const data = await response.json();
+                document.getElementById('demandesResult').innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+            } catch (error) {
+                document.getElementById('demandesResult').innerHTML = `<p style="color: red;">Erreur: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+</html>
