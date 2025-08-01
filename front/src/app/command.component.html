@@ -48,31 +48,45 @@
           <div id="step2">
             <h5 class="mb-3">2. Détails de la commande</h5>
             <div class="mb-3">
-              <label for="article" class="form-label">Article souhaité</label>
-              <select id="article" name="article" class="form-select" [(ngModel)]="formData.article" required>
-                <option value="">Sélectionner</option>
-                <option *ngFor="let a of articleOptions" [value]="a">{{ a }}</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label for="unitPrice" class="form-label">Prix unitaire (€)</label>
-              <input type="number" id="unitPrice" name="unitPrice" class="form-control" min="0" step="0.01" [(ngModel)]="formData.unitPrice">
-            </div>
-            <div class="mb-3">
-              <label for="quantity" class="form-label">Quantité</label>
-              <input type="number" id="quantity" name="quantity" class="form-control" min="1" required [(ngModel)]="formData.quantity">
-            </div>
-            <div class="mb-3">
-              <label for="fireFee" class="form-label">Frais de feu (€)</label>
-              <input type="number" id="fireFee" name="fireFee" class="form-control" min="0" step="0.01" [(ngModel)]="formData.fireFee">
-            </div>
-            <div class="mb-3">
-              <label for="shippingFee" class="form-label">Frais de livraison/retour (€)</label>
-              <input type="number" id="shippingFee" name="shippingFee" class="form-control" min="0" step="0.01" [(ngModel)]="formData.shippingFee">
-            </div>
-            <div class="mb-3">
               <label for="deliveryDate" class="form-label">Date de livraison souhaitée</label>
               <input type="date" id="deliveryDate" name="deliveryDate" class="form-control" [(ngModel)]="formData.deliveryDate">
+            </div>
+            <div *ngFor="let item of formData.items; let i = index" class="border rounded p-3 mb-3 bg-white">
+              <div class="row">
+                <div class="col-12 mb-2">
+                  <label class="form-label" style="font-size:0.95rem;">Article souhaité</label>
+                  <select class="form-select form-select-sm" [(ngModel)]="item.article" name="article{{i}}" required>
+                    <option value="">Sélectionner</option>
+                    <option *ngFor="let a of articleOptions" [value]="a">{{ a }}</option>
+                  </select>
+                </div>
+                <div class="col-12 mb-2">
+                  <label class="form-label" style="font-size:0.95rem;">Prix unitaire (€)</label>
+                  <input type="number" class="form-control form-control-sm" min="0" step="0.01" [(ngModel)]="item.unitPrice" name="unitPrice{{i}}">
+                </div>
+                <div class="col-12 mb-2">
+                  <label class="form-label" style="font-size:0.95rem;">Quantité</label>
+                  <input type="number" class="form-control form-control-sm" min="1" required [(ngModel)]="item.quantity" name="quantity{{i}}">
+                </div>
+                <div class="col-12 mb-2">
+                  <label class="form-label" style="font-size:0.95rem;">Frais de feu (€)</label>
+                  <input type="number" class="form-control form-control-sm" min="0" step="0.01" [(ngModel)]="item.fireFee" name="fireFee{{i}}">
+                </div>
+                <div class="col-12 mb-2">
+                  <label class="form-label" style="font-size:0.95rem;">Frais de livraison/retour (€)</label>
+                  <input type="number" class="form-control form-control-sm" min="0" step="0.01" [(ngModel)]="item.shippingFee" name="shippingFee{{i}}">
+                </div>
+                <div class="col-12 d-flex justify-content-end">
+                  <button *ngIf="formData.items.length > 1" type="button" class="btn btn-outline-danger btn-sm" (click)="removeItem(i)" title="Supprimer cet article">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="mb-3">
+              <button type="button" class="btn btn-outline-primary" (click)="addItem()">
+                Ajouter un article
+              </button>
             </div>
             <div class="d-flex justify-content-between">
               <button type="button" class="btn btn-secondary" (click)="prevStep()">Précédent</button>
@@ -91,6 +105,10 @@
             <div class="mb-3">
               <label for="advance" class="form-label">Avance perçue (€)</label>
               <input type="number" id="advance" name="advance" class="form-control" min="0" step="0.01" [(ngModel)]="formData.advance" placeholder="Ex: 50">
+            </div>
+            <div class="mb-3">
+              <label for="shippingFee" class="form-label">Frais de livraison/retour (€)</label>
+              <input type="number" id="shippingFee" name="shippingFee" class="form-control" min="0" step="0.01" [(ngModel)]="formData.shippingFee">
             </div>
             <div class="mb-3">
               <label for="returnStatus" class="form-label">Retour effectué</label>

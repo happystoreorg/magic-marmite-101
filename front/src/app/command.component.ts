@@ -17,13 +17,22 @@ interface DemandeLocation {
   unitPrice: number;
   quantity: number;
   fireFee: number;
-  shippingFee: number;
   deliveryDate: string;
   
   // Étape 3 - Paiement et retour
   advance: number;
   returnStatus: string;
+  shippingFee: number;
   deposit: number;
+
+  // Liste des articles pour la commande
+  items: Array<{
+    article: string;
+    unitPrice: number;
+    quantity: number;
+    fireFee: number;
+    shippingFee: number;
+  }>;
 }
 
 @Component({
@@ -37,8 +46,13 @@ export class CommandComponent implements OnInit {
   step = 1;
   activeTab = 'exploitation'; // Onglet actif par défaut
 
-  //private readonly apiUrl = 'http://localhost:3001/api';
-  private readonly apiUrl =  'http://192.168.1.180:3000/api'  ; // URL de l'API, à adapter selon votre configuration
+  // Utilisation dynamique de l'URL API selon l'environnement
+  private readonly apiUrl = 'http://localhost:3001/api';
+  private readonly apiUrlCible = 'http://192.168.1.180:3000/api';
+
+  get apiEndpoint(): string {
+    return this.apiUrl; // Utilise l'URL définie dans environment.ts ou environment.prod.ts
+  }
 
   // Objet pour stocker les données du formulaire
   formData: DemandeLocation = {
@@ -55,7 +69,16 @@ export class CommandComponent implements OnInit {
     deliveryDate: '',
     advance: 0,
     returnStatus: '',
-    deposit: 0
+    deposit: 0,
+    items: [
+      {
+        article: '',
+        unitPrice: 0,
+        quantity: 1,
+        fireFee: 0,
+        shippingFee: 0
+      }
+    ]
   };
   
   // État de soumission
@@ -106,7 +129,7 @@ export class CommandComponent implements OnInit {
   }
 
   loadAllDemandes() {
-    this.http.get<any[]>(`${this.apiUrl}/demandes`).subscribe({
+    this.http.get<any[]>(`${this.apiEndpoint}/demandes`).subscribe({
       next: (data) => {
         this.allDemandes = Array.isArray(data) ? data : [];
         this.updatePagination();
@@ -176,7 +199,7 @@ export class CommandComponent implements OnInit {
       }
       
       // Envoyer les données au backend
-      this.http.post(`${this.apiUrl}/demandes`, this.formData).subscribe({
+      this.http.post(`${this.apiEndpoint}/demandes`, this.formData).subscribe({
         next: (result) => {
           console.log('Demande enregistrée:', result);
           this.submitMessage = 'Demande enregistrée avec succès !';
@@ -222,7 +245,16 @@ export class CommandComponent implements OnInit {
       deliveryDate: '',
       advance: 0,
       returnStatus: '',
-      deposit: 0
+      deposit: 0,
+      items: [
+        {
+          article: '',
+          unitPrice: 0,
+          quantity: 1,
+          fireFee: 0,
+          shippingFee: 0
+        }
+      ]
     };
     
     // Réinitialiser le formulaire HTML
@@ -261,7 +293,16 @@ export class CommandComponent implements OnInit {
       deliveryDate: demande.deliveryDate || '',
       advance: demande.advance || 0,
       returnStatus: demande.returnStatus || '',
-      deposit: demande.deposit || 0
+      deposit: demande.deposit || 0,
+      items: demande.items || [
+        {
+          article: '',
+          unitPrice: 0,
+          quantity: 1,
+          fireFee: 0,
+          shippingFee: 0
+        }
+      ]
     };
     // Aller à l'étape 1 du formulaire pour édition
     this.step = 1;
@@ -271,7 +312,7 @@ export class CommandComponent implements OnInit {
   deleteSelectedDemande() {
     if (!this.selectedDemande?.id) return;
     if (!confirm('Voulez-vous vraiment supprimer cette demande ?')) return;
-    this.http.delete(`${this.apiUrl}/demandes/${this.selectedDemande.id}`).subscribe({
+    this.http.delete(`${this.apiEndpoint}/demandes/${this.selectedDemande.id}`).subscribe({
       next: () => {
         this.selectedDemande = null;
         this.refreshAllTabs();
@@ -286,7 +327,7 @@ export class CommandComponent implements OnInit {
   updateSelectedDemande() {
     if (!this.selectedDemande?.id) return;
     // On suppose que formData contient les modifications à appliquer
-    this.http.put(`${this.apiUrl}/demandes/${this.selectedDemande.id}`, this.formData).subscribe({
+    this.http.put(`${this.apiEndpoint}/demandes/${this.selectedDemande.id}`, this.formData).subscribe({
       next: () => {
         this.selectedDemande = null;
         this.refreshAllTabs();
@@ -295,5 +336,21 @@ export class CommandComponent implements OnInit {
         alert('Erreur lors de la mise à jour : ' + (err?.message || ''));
       }
     });
+  }
+
+  addItem() {
+    this.formData.items.push({
+      article: '',
+      unitPrice: 0,
+      quantity: 1,
+      fireFee: 0,
+      shippingFee: 0
+    });
+  }
+
+  removeItem(index: number) {
+    if (this.formData.items.length > 1) {
+      this.formData.items.splice(index, 1);
+    }
   }
 }
