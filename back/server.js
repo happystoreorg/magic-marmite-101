@@ -78,7 +78,20 @@ app.get('/api/demandes', (req, res) => {
     
     if (fs.existsSync(allDemandesPath)) {
       const data = fs.readFileSync(allDemandesPath, 'utf8');
-      const demandes = JSON.parse(data);
+      let demandes = JSON.parse(data);
+      // Filtrer les demandes avec une date de livraison valide
+      // demandes = demandes.filter(demande => demande.deliveryDate && demande.deliveryDate.trim() !==
+
+      // Trier par deliveryDate ascendant (date la plus proche en premier)
+      demandes.sort((a, b) => {
+        // Si une des dates est manquante, la placer à la fin
+        if (!a.deliveryDate && !b.deliveryDate) return 0;
+        if (!a.deliveryDate) return 1;
+        if (!b.deliveryDate) return -1;
+        // Comparer les dates
+        return new Date(a.deliveryDate) - new Date(b.deliveryDate);
+      });
+
       res.json(demandes);
     } else {
       res.json([]);
@@ -125,6 +138,50 @@ app.get('/api/demandes/:id', (req, res) => {
       message: 'Erreur lors de la récupération de la demande',
       error: error.message
     });
+  }
+});
+
+// Mettre à jour une demande existante
+app.put('/api/demandes/:id', (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedData = req.body;
+    const allDemandesPath = path.join(dataDir, 'toutes_demandes.json');
+    if (!fs.existsSync(allDemandesPath)) {
+      return res.status(404).json({ success: false, message: 'Aucune demande trouvée' });
+    }
+    const data = fs.readFileSync(allDemandesPath, 'utf8');
+    let demandes = JSON.parse(data);
+    const idx = demandes.findIndex(d => d.id === id);
+    if (idx === -1) {
+      return res.status(404).json({ success: false, message: 'Demande non trouvée' });
+    }
+    demandes[idx] = { ...demandes[idx], ...updatedData, id }; // conserve l'id
+    fs.writeFileSync(allDemandesPath, JSON.stringify(demandes, null, 2));
+    res.json({ success: true, message: 'Demande mise à jour' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Erreur lors de la mise à jour', error: error.message });
+  }
+});
+
+// Supprimer une demande existante
+app.delete('/api/demandes/:id', (req, res) => {
+  try {
+    const { id } = req.params;
+    const allDemandesPath = path.join(dataDir, 'toutes_demandes.json');
+    if (!fs.existsSync(allDemandesPath)) {
+      return res.status(404).json({ success: false, message: 'Aucune demande trouvée' });
+    }
+    const data = fs.readFileSync(allDemandesPath, 'utf8');
+    let demandes = JSON.parse(data);
+    const newDemandes = demandes.filter(d => d.id !== id);
+    if (newDemandes.length === demandes.length) {
+      return res.status(404).json({ success: false, message: 'Demande non trouvée' });
+    }
+    fs.writeFileSync(allDemandesPath, JSON.stringify(newDemandes, null, 2));
+    res.json({ success: true, message: 'Demande supprimée' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Erreur lors de la suppression', error: error.message });
   }
 });
 

@@ -2,7 +2,7 @@
 <!-- * * * * * * * * * * * The content below * * * * * * * * * * * * * -->
 <div class="d-flex min-vh-100 bg-light px-4">
   <!-- Bloc gauche (30%) -->
-  <div class="d-flex flex-column align-items-start justify-content-start pe-4" style="width:30%; min-width:300px;">
+  <div class="d-flex flex-column align-items-start justify-content-start pe-4" style="width:15%; min-width:300px;">
     <div class="card shadow-lg w-100 mt-0">
       <div class="card-header bg-primary text-white text-center">
         <h2 class="mb-0">Demande de location de matériel</h2>
@@ -120,9 +120,17 @@
   <!-- Barre verticale de séparation -->
   <div class="border-end border-2 mx-2" style="height:100vh;"></div>
   <!-- Bloc droit (70%) -->
-  <div class="ps-4" style="width:70%;">
+  <div class="ps-4" style="width:85%;">
     <!-- Onglets dashboard -->
     <ul class="nav nav-tabs mb-3" id="dashboardTabs" role="tablist">
+      
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" [class.active]="activeTab === 'avenir'" id="avenir-tab"
+          (click)="activeTab = 'avenir'" data-bs-toggle="tab" data-bs-target="#avenir"
+          type="button" role="tab" aria-controls="avenir" [attr.aria-selected]="activeTab === 'avenir'">
+          A VENIR
+        </button>
+      </li>
       <li class="nav-item" role="presentation">
         <button class="nav-link" [class.active]="activeTab === 'board'" id="board-tab"
           (click)="activeTab = 'board'" data-bs-toggle="tab" data-bs-target="#board"
@@ -134,11 +142,75 @@
         <button class="nav-link" [class.active]="activeTab === 'ok'" id="ok-tab"
           (click)="activeTab = 'ok'" data-bs-toggle="tab" data-bs-target="#ok"
           type="button" role="tab" aria-controls="ok" [attr.aria-selected]="activeTab === 'ok'">
-          OK
+          VALIDÉES (OK or WAITING)
         </button>
       </li>
+
     </ul>
+    
     <div class="tab-content" id="dashboardTabsContent">
+
+      <!-- Nouvel onglet A VENIR -->
+      <div class="tab-pane fade" [class.show]="activeTab === 'avenir'" [class.active]="activeTab === 'avenir'"
+        id="avenir" role="tabpanel" aria-labelledby="avenir-tab">
+        <div class="container-fluid py-3">
+          <h4 class="mb-4 text-primary">Toutes les demandes enregistrées</h4>
+          <!-- Actions pour la ligne sélectionnée -->
+          <div *ngIf="selectedDemande" class="mb-3 d-flex gap-2 align-items-center">
+            <span class="fw-bold text-primary">Action sur la sélection :</span>
+            <button class="btn btn-danger btn-sm" (click)="deleteSelectedDemande()" type="button">
+              Supprimer
+            </button>
+            <button class="btn btn-warning btn-sm" (click)="updateSelectedDemande()" type="button">
+              Mettre à jour
+            </button>
+            <button class="btn btn-secondary btn-sm" (click)="selectedDemande = null" type="button">
+              Annuler
+            </button>
+          </div>
+          <table class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>Date de livraison</th>
+                <th>Client</th>
+                <th>Plateforme</th>
+                <th>Téléphone</th>
+                <th>Article</th>
+                <th>Prix unitaire (€)</th>
+                <th>Quantité</th>
+                <th>Montant (€)</th>
+                <!-- <th>Statut retour</th> -->
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let demande of allDemandes"
+                  [class.table-primary]="isDeliverySoon(demande.deliveryDate)"
+                  [class.table-active]="selectedDemande && selectedDemande.id === demande.id"
+                  [ngStyle]="selectedDemande && selectedDemande.id === demande.id ? {'background-color': '#bee3f8', 'border-left': '5px solid #007bff'} : {}"
+                  style="cursor:pointer"
+                  (click)="onSelectDemande(demande)">
+                <td>{{ demande.deliveryDate | date:'yyyy-MM-dd' }}</td>
+                <td>{{ demande.clientName }}</td>
+                <td>{{ demande.platform }}</td>
+                <td>{{ demande.phone }}</td>
+                <td>{{ demande.color }}</td>
+                <td>{{ demande.unitPrice }}</td>
+                <td>{{ demande.quantity }}</td> 
+                <td>{{ demande.totalAmount || demande.unitPrice }}</td>
+                <!-- <td>
+                  <span *ngIf="demande.returnStatus === 'oui'" class="badge bg-success">Oui</span>
+                  <span *ngIf="demande.returnStatus === 'non'" class="badge bg-danger">Non</span>
+                  <span *ngIf="!demande.returnStatus" class="badge bg-secondary">-</span>
+                </td> -->
+              </tr>
+              <tr *ngIf="allDemandes.length === 0">
+                <td colspan="5" class="text-center text-muted">Aucune demande enregistrée</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- Nouvel Board -->
       <div class="tab-pane fade" [class.show]="activeTab === 'board'" [class.active]="activeTab === 'board'"
         id="board" role="tabpanel" aria-labelledby="board-tab">
         <!-- Dashboard -->
@@ -335,6 +407,7 @@
           </table>
         </div>
       </div>
+
     </div>
   </div>
 </div>
