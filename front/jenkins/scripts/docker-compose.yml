@@ -6,4 +6,4 @@ services:
     container_name: magic-marmite-ui-101-container
     restart: unless-stopped
     ports:
-      - 9088:34439
+      - 9088:34449
