@@ -30,3 +30,7 @@ yarn-error.log*
 # Angular specific
 .angular/
 coverage/
+
+# Exclude all files in the back/data directory
+back/data/*
+back/test-*
