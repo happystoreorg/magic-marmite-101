@@ -1,0 +1,18 @@
+{
+  "id": "1754057348311",
+  "timestamp": "2025-08-01T14:09:08.311Z",
+  "clientName": "Julien Fabre",
+  "platform": "Leboncoin",
+  "contactDate": "2025-08-11",
+  "comments": "Besoin de nappes rouges",
+  "phone": "0601234580",
+  "color": "Rouge",
+  "unitPrice": 32,
+  "quantity": 7,
+  "fireFee": 9,
+  "shippingFee": 14,
+  "deliveryDate": "2025-08-30",
+  "advance": 65,
+  "returnStatus": "oui",
+  "deposit": 95
+}

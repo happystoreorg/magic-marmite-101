@@ -1,0 +1,18 @@
+{
+  "id": "1754053308342",
+  "timestamp": "2025-08-01T13:01:48.342Z",
+  "clientName": "Nouveau client",
+  "platform": "Facebook",
+  "contactDate": "2025-09-05",
+  "comments": "Un client pour le 5 septembre",
+  "phone": "098765",
+  "color": "Doré",
+  "unitPrice": 0,
+  "quantity": 17,
+  "fireFee": 0,
+  "shippingFee": 0,
+  "deliveryDate": "2025-09-24",
+  "advance": 0,
+  "returnStatus": "",
+  "deposit": 0
+}
