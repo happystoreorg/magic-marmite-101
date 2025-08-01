@@ -51,7 +51,7 @@ export class CommandComponent implements OnInit {
   private readonly apiUrlCible = 'http://192.168.1.180:3000/api';
 
   get apiEndpoint(): string {
-    return this.apiUrl; // Utilise l'URL définie dans environment.ts ou environment.prod.ts
+    return this.apiUrlCible; // Utilise l'URL définie dans environment.ts ou environment.prod.ts
   }
 
   // Objet pour stocker les données du formulaire
@@ -97,10 +97,24 @@ export class CommandComponent implements OnInit {
 
   // Listes statiques pour les champs platform et article
   readonly platformOptions = [
-    'WhatsApp', 'Facebook', 'Instagram', 'Téléphone', 'Email', 'Autre'
+    'Leboncoin | Sara_',
+    'Leboncoin | Nono', 
+    'Leboncoin | Kim_',
+    'Facebook | Sonia', 
+    'Facebook | Arun', 
+    'Direct | Arnold',
+    'Direct | Nora',  
+    'Autre'
   ];
   readonly articleOptions = [
-    'Chaise', 'Table', 'Podium', 'Tente', 'Vaisselle', 'Décoration', 'Autre'
+    'Chauffe-plat doré circulaire', 
+    'Chauffe-plat argenté rectangulaire', 
+    'Gel combustible', 
+    'Seau à champagne acrylique sombre', 
+    'Seau à champagne acrylique clair', 
+    'Cube de présentation transparent',
+    'Cube de présentation blanc',
+    'Autre'
   ];
 
   constructor(private readonly http: HttpClient) {}
@@ -352,5 +366,14 @@ export class CommandComponent implements OnInit {
     if (this.formData.items.length > 1) {
       this.formData.items.splice(index, 1);
     }
+  }
+
+  getTotalAmount(demande: any): number {
+    if (!demande.items || !Array.isArray(demande.items)) return 0;
+    return demande.items.reduce((sum: number, item: { unitPrice: number; quantity: number; }) => {
+      const unitPrice = Number(item.unitPrice) || 0;
+      const quantity = Number(item.quantity) || 0;
+      return sum + unitPrice * quantity;
+    }, 0);
   }
 }

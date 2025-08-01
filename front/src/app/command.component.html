@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!-- * * * * * * * * * * * The content below * * * * * * * * * * * * * -->
-<div class="d-flex min-vh-100 bg-light px-4">
+<div class="d-flex min-vh-100 bg-light px-4" style="font-size: 0.95rem;">
   <!-- Bloc gauche (30%) -->
   <div class="d-flex flex-column align-items-start justify-content-start pe-4" style="width:15%; min-width:300px;">
     <div class="card shadow-lg w-100 mt-0">
@@ -67,14 +67,6 @@
                 <div class="col-12 mb-2">
                   <label class="form-label" style="font-size:0.95rem;">Quantité</label>
                   <input type="number" class="form-control form-control-sm" min="1" required [(ngModel)]="item.quantity" name="quantity{{i}}">
-                </div>
-                <div class="col-12 mb-2">
-                  <label class="form-label" style="font-size:0.95rem;">Frais de feu (€)</label>
-                  <input type="number" class="form-control form-control-sm" min="0" step="0.01" [(ngModel)]="item.fireFee" name="fireFee{{i}}">
-                </div>
-                <div class="col-12 mb-2">
-                  <label class="form-label" style="font-size:0.95rem;">Frais de livraison/retour (€)</label>
-                  <input type="number" class="form-control form-control-sm" min="0" step="0.01" [(ngModel)]="item.shippingFee" name="shippingFee{{i}}">
                 </div>
                 <div class="col-12 d-flex justify-content-end">
                   <button *ngIf="formData.items.length > 1" type="button" class="btn btn-outline-danger btn-sm" (click)="removeItem(i)" title="Supprimer cet article">
@@ -226,10 +218,7 @@
                 <th>Client</th>
                 <th>Plateforme</th>
                 <th>Téléphone</th>
-                <th>Article</th>
-                <th>Prix unitaire (€)</th>
-                <th>Quantité</th>
-                <th>Montant (€)</th>
+                <th>Montant total (€)</th>
                 <!-- <th>Statut retour</th> -->
               </tr>
             </thead>
@@ -244,11 +233,10 @@
                 <td>{{ demande.clientName }}</td>
                 <td>{{ demande.platform }}</td>
                 <td>{{ demande.phone }}</td>
-                <td>{{ demande.article }}</td>
-                <td>{{ demande.unitPrice }}</td>
-                <td>{{ demande.quantity }}</td> 
-                <td>{{ demande.totalAmount || demande.unitPrice }}</td>
-                <!-- <td>
+                <td>
+                    {{ getTotalAmount(demande) || '0' }} €
+                </td>               
+                 <!-- <td>
                   <span *ngIf="demande.returnStatus === 'oui'" class="badge bg-success">Oui</span>
                   <span *ngIf="demande.returnStatus === 'non'" class="badge bg-danger">Non</span>
                   <span *ngIf="!demande.returnStatus" class="badge bg-secondary">-</span>
