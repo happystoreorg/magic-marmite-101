@@ -21,7 +21,10 @@
             </div>
             <div class="mb-3">
               <label for="platform" class="form-label">Plateforme de contact</label>
-              <input type="text" id="platform" name="platform" class="form-control" [(ngModel)]="formData.platform">
+              <select id="platform" name="platform" class="form-select" [(ngModel)]="formData.platform" required>
+                <option value="">Sélectionner</option>
+                <option *ngFor="let p of platformOptions" [value]="p">{{ p }}</option>
+              </select>
             </div>
             <div class="mb-3">
               <label for="contactDate" class="form-label">Date de prise de contact</label>
@@ -45,8 +48,11 @@
           <div id="step2">
             <h5 class="mb-3">2. Détails de la commande</h5>
             <div class="mb-3">
-              <label for="color" class="form-label">Couleur souhaitée</label>
-              <input type="text" id="color" name="color" class="form-control" [(ngModel)]="formData.color">
+              <label for="article" class="form-label">Article souhaité</label>
+              <select id="article" name="article" class="form-select" [(ngModel)]="formData.article" required>
+                <option value="">Sélectionner</option>
+                <option *ngFor="let a of articleOptions" [value]="a">{{ a }}</option>
+              </select>
             </div>
             <div class="mb-3">
               <label for="unitPrice" class="form-label">Prix unitaire (€)</label>
@@ -78,6 +84,10 @@
           @if (step === 3) {
           <div id="step3">
             <h5 class="mb-3">3. Paiement et retour</h5>
+            <!-- Bouton Précédent en haut à gauche, plus petit -->
+            <div class="mb-2">
+              <button type="button" class="btn btn-secondary btn-sm" style="font-size:0.95rem;" (click)="prevStep()">Précédent</button>
+            </div>
             <div class="mb-3">
               <label for="advance" class="form-label">Avance perçue (€)</label>
               <input type="number" id="advance" name="advance" class="form-control" min="0" step="0.01" [(ngModel)]="formData.advance" placeholder="Ex: 50">
@@ -94,13 +104,16 @@
               <label for="deposit" class="form-label">Montant de la caution (€)</label>
               <input type="number" id="deposit" name="deposit" class="form-control" min="0" step="0.01" [(ngModel)]="formData.deposit">
             </div>
-            <div class="d-flex justify-content-between">
-              <button type="button" class="btn btn-secondary" (click)="prevStep()">Précédent</button>
-              <button type="submit" class="btn btn-success btn-lg" [disabled]="isSubmitting">
+            <!-- Boutons Enregistrer et Mettre à jour, centrés et police réduite -->
+            <div class="d-flex justify-content-center gap-2 mt-3">
+              <button type="submit" class="btn btn-primary btn-lg" [disabled]="isSubmitting" style="font-size:1rem;">
                 @if (isSubmitting) {
                   <output class="spinner-border spinner-border-sm me-2" aria-hidden="true"></output>
                 }
                 {{ isSubmitting ? 'Enregistrement...' : 'Enregistrer la demande' }}
+              </button>
+              <button *ngIf="selectedDemande" class="btn btn-warning btn-lg" type="button" (click)="updateSelectedDemande()" style="font-size:1rem;">
+                Mettre à jour
               </button>
             </div>
             <!-- Message de feedback -->
@@ -123,50 +136,70 @@
   <div class="ps-4" style="width:85%;">
     <!-- Onglets dashboard -->
     <ul class="nav nav-tabs mb-3" id="dashboardTabs" role="tablist">
-      
       <li class="nav-item" role="presentation">
-        <button class="nav-link" [class.active]="activeTab === 'avenir'" id="avenir-tab"
-          (click)="activeTab = 'avenir'" data-bs-toggle="tab" data-bs-target="#avenir"
-          type="button" role="tab" aria-controls="avenir" [attr.aria-selected]="activeTab === 'avenir'">
-          A VENIR
+        <button
+          class="nav-link"
+          [class.active]="activeTab === 'exploitation'"
+          [class.btn]="activeTab === 'exploitation'"
+          [class.btn-primary]="activeTab === 'exploitation'"
+          id="exploitation-tab"
+          (click)="activeTab = 'exploitation'"
+          data-bs-toggle="tab"
+          data-bs-target="#exploitation"
+          type="button"
+          role="tab"
+          aria-controls="exploitation"
+          [attr.aria-selected]="activeTab === 'exploitation'">
+          Exploitation
         </button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" [class.active]="activeTab === 'board'" id="board-tab"
-          (click)="activeTab = 'board'" data-bs-toggle="tab" data-bs-target="#board"
-          type="button" role="tab" aria-controls="board" [attr.aria-selected]="activeTab === 'board'">
-          Board
+        <button
+          class="nav-link"
+          [class.active]="activeTab === 'dashboard'"
+          [class.btn]="activeTab === 'dashboard'"
+          [class.btn-primary]="activeTab === 'dashboard'"
+          id="dashboard-tab"
+          (click)="activeTab = 'dashboard'"
+          data-bs-toggle="tab"
+          data-bs-target="#dashboard"
+          type="button"
+          role="tab"
+          aria-controls="dashboard"
+          [attr.aria-selected]="activeTab === 'dashboard'">
+          Dashboard
         </button>
       </li>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link" [class.active]="activeTab === 'ok'" id="ok-tab"
-          (click)="activeTab = 'ok'" data-bs-toggle="tab" data-bs-target="#ok"
-          type="button" role="tab" aria-controls="ok" [attr.aria-selected]="activeTab === 'ok'">
-          VALIDÉES (OK or WAITING)
-        </button>
-      </li>
-
     </ul>
-    
-    <div class="tab-content" id="dashboardTabsContent">
 
-      <!-- Nouvel onglet A VENIR -->
-      <div class="tab-pane fade" [class.show]="activeTab === 'avenir'" [class.active]="activeTab === 'avenir'"
-        id="avenir" role="tabpanel" aria-labelledby="avenir-tab">
+    <div class="tab-content" id="dashboardTabsContent">
+      <!-- Onglet EXPLOITATION -->
+      <div class="tab-pane fade"
+           [class.show]="activeTab === 'exploitation'"
+           [class.active]="activeTab === 'exploitation'"
+           id="exploitation"
+           role="tabpanel"
+           aria-labelledby="exploitation-tab">
         <div class="container-fluid py-3">
           <h4 class="mb-4 text-primary">Toutes les demandes enregistrées</h4>
-          <!-- Actions pour la ligne sélectionnée -->
-          <div *ngIf="selectedDemande" class="mb-3 d-flex gap-2 align-items-center">
-            <span class="fw-bold text-primary">Action sur la sélection :</span>
-            <button class="btn btn-danger btn-sm" (click)="deleteSelectedDemande()" type="button">
-              Supprimer
-            </button>
-            <button class="btn btn-warning btn-sm" (click)="updateSelectedDemande()" type="button">
-              Mettre à jour
-            </button>
-            <button class="btn btn-secondary btn-sm" (click)="selectedDemande = null" type="button">
-              Annuler
-            </button>
+          <!-- Pagination info -->
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <div>
+              Page {{ currentPage }} sur {{ totalPages }} 
+              ({{ paginatedDemandes.length }} affichées sur {{ allDemandes.length }})
+            </div>
+            <div>
+              <button class="btn btn-outline-primary btn-sm me-1"
+                      (click)="prevPage()"
+                      [disabled]="currentPage === 1">
+                Précédent
+              </button>
+              <button class="btn btn-outline-primary btn-sm"
+                      (click)="nextPage()"
+                      [disabled]="currentPage === totalPages">
+                Suivant
+              </button>
+            </div>
           </div>
           <table class="table table-bordered table-striped">
             <thead>
@@ -183,17 +216,17 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let demande of allDemandes"
+              <tr *ngFor="let demande of paginatedDemandes"
                   [class.table-primary]="isDeliverySoon(demande.deliveryDate)"
                   [class.table-active]="selectedDemande && selectedDemande.id === demande.id"
-                  [ngStyle]="selectedDemande && selectedDemande.id === demande.id ? {'background-color': '#bee3f8', 'border-left': '5px solid #007bff'} : {}"
+                  [ngStyle]="selectedDemande && selectedDemande.id === demande.id ? {'background-color': '#ffcc00', 'border-left': '5px solid #ffcc00', 'border-bottom': '1px solid #ffcc00'} : {}"
                   style="cursor:pointer"
                   (click)="onSelectDemande(demande)">
                 <td>{{ demande.deliveryDate | date:'yyyy-MM-dd' }}</td>
                 <td>{{ demande.clientName }}</td>
                 <td>{{ demande.platform }}</td>
                 <td>{{ demande.phone }}</td>
-                <td>{{ demande.color }}</td>
+                <td>{{ demande.article }}</td>
                 <td>{{ demande.unitPrice }}</td>
                 <td>{{ demande.quantity }}</td> 
                 <td>{{ demande.totalAmount || demande.unitPrice }}</td>
@@ -203,211 +236,37 @@
                   <span *ngIf="!demande.returnStatus" class="badge bg-secondary">-</span>
                 </td> -->
               </tr>
-              <tr *ngIf="allDemandes.length === 0">
-                <td colspan="5" class="text-center text-muted">Aucune demande enregistrée</td>
+              <tr *ngIf="paginatedDemandes.length === 0">
+                <td colspan="8" class="text-center text-muted">Aucune demande enregistrée</td>
               </tr>
             </tbody>
           </table>
+          <!-- Actions pour la ligne sélectionnée -->
+          <div *ngIf="selectedDemande" class="mb-3 d-flex gap-2 align-items-center">
+            <span class="fw-bold text-primary">Action sur la sélection :</span>
+            <button class="btn btn-danger btn-sm" (click)="deleteSelectedDemande()" type="button">
+              Supprimer
+            </button>
+            <!-- Le bouton "Mettre à jour" a été déplacé à côté du bouton "Enregistrer la demande" dans le formulaire -->
+            <button class="btn btn-secondary btn-sm" (click)="selectedDemande = null" type="button">
+              Annuler
+            </button>
+          </div>
         </div>
       </div>
-      <!-- Nouvel Board -->
-      <div class="tab-pane fade" [class.show]="activeTab === 'board'" [class.active]="activeTab === 'board'"
-        id="board" role="tabpanel" aria-labelledby="board-tab">
-        <!-- Dashboard -->
+      <!-- Nouvel onglet DASHBOARD -->
+      <div class="tab-pane fade"
+           [class.show]="activeTab === 'dashboard'"
+           [class.active]="activeTab === 'dashboard'"
+           id="dashboard"
+           role="tabpanel"
+           aria-labelledby="dashboard-tab">
         <div class="container-fluid py-3">
-          <h3 class="mb-4 text-primary">Tableau de bord des locations</h3>
-          <div class="row g-4">
-            <!-- Indicateurs principaux -->
-            <div class="col-12 col-md-4">
-              <div class="card text-center border-success">
-                <div class="card-header bg-success text-white">Cette semaine</div>
-                <div class="card-body">
-                  <h5 class="card-title">Demandes : <span class="fw-bold">12</span></h5>
-                  <p class="mb-1">Montant total : <span class="fw-bold">1 200 €</span></p>
-                  <p class="mb-1">Matériel loué : <span class="fw-bold">85</span></p>
-                  <p class="mb-1">Retours effectués : <span class="fw-bold">10</span></p>
-                  <p class="mb-1">Avances perçues : <span class="fw-bold">600 €</span></p>
-                </div>
-              </div>
-            </div>
-            <div class="col-12 col-md-4">
-              <div class="card text-center border-primary">
-                <div class="card-header bg-primary text-white">Ce mois</div>
-                <div class="card-body">
-                  <h5 class="card-title">Demandes : <span class="fw-bold">48</span></h5>
-                  <p class="mb-1">Montant total : <span class="fw-bold">4 800 €</span></p>
-                  <p class="mb-1">Matériel loué : <span class="fw-bold">350</span></p>
-                  <p class="mb-1">Retours effectués : <span class="fw-bold">40</span></p>
-                  <p class="mb-1">Avances perçues : <span class="fw-bold">2 400 €</span></p>
-                </div>
-              </div>
-            </div>
-            <div class="col-12 col-md-4">
-              <div class="card text-center border-warning">
-                <div class="card-header bg-warning text-dark">Cette année</div>
-                <div class="card-body">
-                  <h5 class="card-title">Demandes : <span class="fw-bold">320</span></h5>
-                  <p class="mb-1">Montant total : <span class="fw-bold">32 000 €</span></p>
-                  <p class="mb-1">Matériel loué : <span class="fw-bold">2 900</span></p>
-                  <p class="mb-1">Retours effectués : <span class="fw-bold">310</span></p>
-                  <p class="mb-1">Avances perçues : <span class="fw-bold">16 000 €</span></p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Graphiques et détails -->
-          <div class="row mt-4">
-            <div class="col-12 col-lg-6 mb-4">
-              <div class="card h-100">
-                <div class="card-header bg-light">
-                  <strong>Répartition des demandes par plateforme</strong>
-                </div>
-                <div class="card-body">
-                  <!-- Placeholder graphique -->
-                  <div class="text-center text-muted" style="height:180px; display:flex; align-items:center; justify-content:center;">
-                    <span>[Graphique camembert ici]</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-12 col-lg-6 mb-4">
-              <div class="card h-100">
-                <div class="card-header bg-light">
-                  <strong>Évolution hebdomadaire des locations</strong>
-                </div>
-                <div class="card-body">
-                  <!-- Placeholder graphique -->
-                  <div class="text-center text-muted" style="height:180px; display:flex; align-items:center; justify-content:center;">
-                    <span>[Courbe ou barres ici]</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- Liste des dernières demandes -->
-          <div class="card mt-4">
-            <div class="card-header bg-secondary text-white">
-              <strong>Dernières demandes enregistrées</strong>
-            </div>
-            <div class="card-body p-0">
-              <table class="table table-striped mb-0">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Client</th>
-                    <th>Plateforme</th>
-                    <th>Montant (€)</th>
-                    <th>Statut retour</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>2024-06-10</td>
-                    <td>Jean Dupont</td>
-                    <td>WhatsApp</td>
-                    <td>150</td>
-                    <td><span class="badge bg-success">Oui</span></td>
-                  </tr>
-                  <tr>
-                    <td>2024-06-09</td>
-                    <td>Marie Martin</td>
-                    <td>Facebook</td>
-                    <td>200</td>
-                    <td><span class="badge bg-danger">Non</span></td>
-                  </tr>
-                  <tr>
-                    <td>2024-06-08</td>
-                    <td>Ali Traoré</td>
-                    <td>Instagram</td>
-                    <td>120</td>
-                    <td><span class="badge bg-success">Oui</span></td>
-                  </tr>
-                  <!-- ... -->
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-        <!-- Fin dashboard -->
-      </div>
-      <!-- Nouvel onglet OK -->
-      <div class="tab-pane fade" [class.show]="activeTab === 'ok'" [class.active]="activeTab === 'ok'"
-        id="ok" role="tabpanel" aria-labelledby="ok-tab">
-        <div class="container-fluid py-3">
-          <h4 class="mb-4 text-primary">Demandes avec avance perçue</h4>
-          <table class="table table-bordered table-striped">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Client</th>
-                <th>Plateforme</th>
-                <th>Montant total (€)</th>
-                <th>Avance perçue (€)</th>
-                <th>Reste à payer (€)</th>
-                <th>Statut retour</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Exemple de données statiques, à remplacer par une boucle Angular si besoin -->
-              <tr>
-                <td>2024-06-10</td>
-                <td>Jean Dupont</td>
-                <td>WhatsApp</td>
-                <td>150</td>
-                <td>50</td>
-                <td>100</td>
-                <td><span class="badge bg-success">Oui</span></td>
-              </tr>
-              <tr>
-                <td>2024-06-09</td>
-                <td>Marie Martin</td>
-                <td>Facebook</td>
-                <td>200</td>
-                <td>100</td>
-                <td>100</td>
-                <td><span class="badge bg-danger">Non</span></td>
-              </tr>
-              <!-- ... -->
-            </tbody>
-          </table>
-          <!-- Nouveau tableau : total matériel loué par type et par date -->
-          <h5 class="mt-5 mb-3 text-primary">Synthèse du matériel loué par type et par date</h5>
-          <table class="table table-bordered table-hover">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Type de matériel</th>
-                <th>Quantité totale louée</th>
-              </tr>
-            </thead>
-            <tbody>
-              <!-- Exemple de données statiques, à remplacer par une boucle Angular si besoin -->
-              <tr>
-                <td>2024-06-10</td>
-                <td>Chaises</td>
-                <td>40</td>
-              </tr>
-              <tr>
-                <td>2024-06-10</td>
-                <td>Tables</td>
-                <td>10</td>
-              </tr>
-              <tr>
-                <td>2024-06-09</td>
-                <td>Chaises</td>
-                <td>20</td>
-              </tr>
-              <tr>
-                <td>2024-06-09</td>
-                <td>Podiums</td>
-                <td>2</td>
-              </tr>
-              <!-- ... -->
-            </tbody>
-          </table>
+          <h4 class="mb-4 text-primary">Dashboard</h4>
+          <!-- Ajoute ici le contenu du dashboard -->
+          <div class="alert alert-info">Contenu du dashboard à compléter.</div>
         </div>
       </div>
-
     </div>
   </div>
 </div>

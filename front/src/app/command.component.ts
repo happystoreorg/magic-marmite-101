@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -13,7 +13,7 @@ interface DemandeLocation {
   phone: string;
   
   // Étape 2 - Détails de la commande
-  color: string;
+  article: string;
   unitPrice: number;
   quantity: number;
   fireFee: number;
@@ -33,9 +33,9 @@ interface DemandeLocation {
   templateUrl: './command.component.html',
   styleUrls: ['./command.component.css']
 })
-export class CommandComponent {
+export class CommandComponent implements OnInit {
   step = 1;
-  activeTab = 'board';
+  activeTab = 'exploitation'; // Onglet actif par défaut
 
   private readonly apiUrl = 'http://localhost:3001/api';
   
@@ -46,7 +46,7 @@ export class CommandComponent {
     contactDate: '',
     comments: '',
     phone: '',
-    color: '',
+    article: '',
     unitPrice: 0,
     quantity: 1,
     fireFee: 0,
@@ -63,9 +63,21 @@ export class CommandComponent {
 
   // Liste de toutes les demandes pour l'onglet "A VENIR"
   allDemandes: any[] = [];
+  paginatedDemandes: any[] = [];
+  currentPage: number = 1;
+  pageSize: number = 10;
+  totalPages: number = 1;
 
   // Demande sélectionnée pour édition
   selectedDemande: any = null;
+
+  // Listes statiques pour les champs platform et article
+  readonly platformOptions = [
+    'WhatsApp', 'Facebook', 'Instagram', 'Téléphone', 'Email', 'Autre'
+  ];
+  readonly articleOptions = [
+    'Chaise', 'Table', 'Podium', 'Tente', 'Vaisselle', 'Décoration', 'Autre'
+  ];
 
   constructor(private readonly http: HttpClient) {}
 
@@ -96,6 +108,7 @@ export class CommandComponent {
     this.http.get<any[]>(`${this.apiUrl}/demandes`).subscribe({
       next: (data) => {
         this.allDemandes = Array.isArray(data) ? data : [];
+        this.updatePagination();
         // Si d'autres tableaux utilisent ces données, mettez-les à jour ici aussi
       },
       error: (err) => {
@@ -103,6 +116,27 @@ export class CommandComponent {
         this.allDemandes = [];
       }
     });
+  }
+
+  updatePagination() {
+    this.totalPages = Math.max(1, Math.ceil(this.allDemandes.length / this.pageSize));
+    const start = (this.currentPage - 1) * this.pageSize;
+    const end = start + this.pageSize;
+    this.paginatedDemandes = this.allDemandes.slice(start, end);
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.updatePagination();
+    }
+  }
+
+  prevPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.updatePagination();
+    }
   }
 
   nextStep() {
@@ -179,7 +213,7 @@ export class CommandComponent {
       contactDate: '',
       comments: '',
       phone: '',
-      color: '',
+      article: '',
       unitPrice: 0,
       quantity: 1,
       fireFee: 0,
@@ -218,7 +252,7 @@ export class CommandComponent {
       contactDate: demande.contactDate || '',
       comments: demande.comments || '',
       phone: demande.phone || '',
-      color: demande.color || '',
+      article: demande.article || '',
       unitPrice: demande.unitPrice || 0,
       quantity: demande.quantity || 1,
       fireFee: demande.fireFee || 0,

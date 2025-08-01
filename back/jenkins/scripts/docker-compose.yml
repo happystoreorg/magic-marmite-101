@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   back:
     build:
@@ -8,10 +6,7 @@ services:
     container_name: back
     ports:
       - "3000:3000"
-    environment:
-      # Ajoute ici tes variables d'environnement si besoin
-      # Exemple:
-      # NODE_ENV: production
+    environment: {}
     restart: unless-stopped
     # volumes:
     #   - ../../:/app  # Décommente pour le développement local si besoin
