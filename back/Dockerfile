@@ -14,7 +14,7 @@ RUN npm install --production
 COPY . .
 
 # Expose le port (modifie selon ton app, ex: 3000)
-EXPOSE 3000
+EXPOSE 3001
 
 # Commande de démarrage (modifie selon ton app, ex: npm start ou node index.js)
 CMD ["npm", "start"]

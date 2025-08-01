@@ -5,7 +5,7 @@ services:
       dockerfile: Dockerfile
     container_name: back
     ports:
-      - "3000:3000"
+      - "3000:3001"
     environment: {}
     restart: unless-stopped
     # volumes:

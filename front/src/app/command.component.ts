@@ -37,8 +37,9 @@ export class CommandComponent implements OnInit {
   step = 1;
   activeTab = 'exploitation'; // Onglet actif par défaut
 
-  private readonly apiUrl = 'http://localhost:3001/api';
-  
+  //private readonly apiUrl = 'http://localhost:3001/api';
+  private readonly apiUrl =  'http://192.168.1.180:3000/api'  ; // URL de l'API, à adapter selon votre configuration
+
   // Objet pour stocker les données du formulaire
   formData: DemandeLocation = {
     clientName: '',
