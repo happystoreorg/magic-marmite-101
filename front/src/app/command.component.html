@@ -2,7 +2,8 @@
 <!-- * * * * * * * * * * * The content below * * * * * * * * * * * * * -->
 <div class="d-flex min-vh-100 bg-light px-4" style="font-size: 0.95rem;">
   <!-- Bloc gauche (30%) -->
-  <div class="d-flex flex-column align-items-start justify-content-start pe-4" style="width:15%; min-width:300px;">
+  <div class="d-flex flex-column align-items-start justify-content-start pe-4"
+       style="width:15%; min-width:300px; position:sticky; top:0; align-self: flex-start; z-index: 1020;">
     <div class="card shadow-lg w-100 mt-0">
       <div class="card-header bg-primary text-white text-center">
         <h2 class="mb-0">Demande de location de matériel</h2>
@@ -68,6 +69,11 @@
                   <label class="form-label" style="font-size:0.95rem;">Quantité</label>
                   <input type="number" class="form-control form-control-sm" min="1" required [(ngModel)]="item.quantity" name="quantity{{i}}">
                 </div>
+                <!-- Champ caution déplacé ici -->
+                <div class="col-12 mb-2">
+                  <label class="form-label" style="font-size:0.95rem;">Caution (€)</label>
+                  <input type="number" class="form-control form-control-sm" min="0" step="0.01" [(ngModel)]="item.deposit" name="deposit{{i}}">
+                </div>
                 <div class="col-12 d-flex justify-content-end">
                   <button *ngIf="formData.items.length > 1" type="button" class="btn btn-outline-danger btn-sm" (click)="removeItem(i)" title="Supprimer cet article">
                     <span aria-hidden="true">&times;</span>
@@ -110,10 +116,11 @@
                 <option value="non">Non</option>
               </select>
             </div>
-            <div class="mb-3">
+            <!-- Champ caution supprimé d'ici -->
+            <!-- <div class="mb-3">
               <label for="deposit" class="form-label">Montant de la caution (€)</label>
               <input type="number" id="deposit" name="deposit" class="form-control" min="0" step="0.01" [(ngModel)]="formData.deposit">
-            </div>
+            </div> -->
             <!-- Boutons Enregistrer et Mettre à jour, centrés et police réduite -->
             <div class="d-flex justify-content-center gap-2 mt-3">
               <button type="submit" class="btn btn-primary btn-lg" [disabled]="isSubmitting" style="font-size:1rem;">
@@ -145,7 +152,8 @@
   <!-- Bloc droit (70%) -->
   <div class="ps-4" style="width:85%;">
     <!-- Onglets dashboard -->
-    <ul class="nav nav-tabs mb-3" id="dashboardTabs" role="tablist">
+    <ul class="nav nav-tabs mb-3" id="dashboardTabs" role="tablist"
+        style="position:sticky; top:0; background:#f8f9fa; z-index:1030;">
       <li class="nav-item" role="presentation">
         <button
           class="nav-link"
@@ -238,11 +246,6 @@
                 <td>
                     {{ getTotalAmount(demande) || '0' }} €
                 </td>               
-                 <!-- <td>
-                  <span *ngIf="demande.returnStatus === 'oui'" class="badge bg-success">Oui</span>
-                  <span *ngIf="demande.returnStatus === 'non'" class="badge bg-danger">Non</span>
-                  <span *ngIf="!demande.returnStatus" class="badge bg-secondary">-</span>
-                </td> -->
               </tr>
               <tr *ngIf="paginatedDemandes.length === 0">
                 <td colspan="8" class="text-center text-muted">Aucune demande enregistrée</td>
@@ -291,8 +294,6 @@
                     <th>Article</th>
                     <th>Prix unitaire (€)</th>
                     <th>Quantité</th>
-                    <th>Frais feu (€)</th>
-                    <th>Frais livraison (€)</th>
                     <th>Total (€)</th>
                   </tr>
                 </thead>
@@ -301,8 +302,6 @@
                     <td>{{ item.article }}</td>
                     <td>{{ item.unitPrice }}</td>
                     <td>{{ item.quantity }}</td>
-                    <td>{{ item.fireFee }}</td>
-                    <td>{{ item.shippingFee }}</td>
                     <td>{{ (item.unitPrice * item.quantity) + (item.fireFee || 0) + (item.shippingFee || 0) }}</td>
                   </tr>
                 </tbody>
@@ -310,6 +309,9 @@
             </div>
             <div class="col-md-6"><strong>Commentaires :</strong> {{ selectedDemande.comments }}</div>
           </div>
+
+          <!-- Ajout d'un espace vertical supplémentaire -->
+          <div style="height: 0.75rem;"></div>
 
           <!-- Actions pour la ligne sélectionnée -->
           <div *ngIf="selectedDemande" class="mb-3 d-flex gap-2 align-items-center">
@@ -321,6 +323,29 @@
             <button class="btn btn-secondary btn-sm" (click)="selectedDemande = null" type="button">
               Annuler
             </button>
+            <!-- Nouveau bouton Message récapitulatif -->
+            <button class="btn btn-info btn-sm" type="button" (click)="showRecap = true">
+              Message récapitulatif
+            </button>
+          </div>
+          <!-- Fenêtre modale simple pour le message récapitulatif -->
+          <div *ngIf="showRecap" class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,0.2);">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header py-2">
+                  <h6 class="modal-title">Message récapitulatif pour le client</h6>
+                  <button type="button" class="btn-close" (click)="showRecap = false"></button>
+                </div>
+
+                <div class="modal-body">
+                  <textarea class="form-control" rows="10" readonly>{{ getRecapMessage(selectedDemande) }}</textarea>
+                </div>
+
+                <div class="modal-footer py-2">
+                  <button type="button" class="btn btn-secondary btn-sm" (click)="showRecap = false">Fermer</button>
+                </div>
+              </div>
+            </div>
           </div>
         }
       </div>

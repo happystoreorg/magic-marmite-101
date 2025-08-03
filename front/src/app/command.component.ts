@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 
 interface DemandeLocation {
@@ -32,6 +32,7 @@ interface DemandeLocation {
     quantity: number;
     fireFee: number;
     shippingFee: number;
+    deposit: number; // Ajout du champ deposit pour chaque item
   }>;
 }
 
@@ -76,7 +77,8 @@ export class CommandComponent implements OnInit {
         unitPrice: 0,
         quantity: 1,
         fireFee: 0,
-        shippingFee: 0
+        shippingFee: 0,
+        deposit: 0 // Ajout du champ deposit pour chaque item
       }
     ]
   };
@@ -266,7 +268,8 @@ export class CommandComponent implements OnInit {
           unitPrice: 0,
           quantity: 1,
           fireFee: 0,
-          shippingFee: 0
+          shippingFee: 0,
+          deposit: 0 // Ajout du champ deposit pour chaque item
         }
       ]
     };
@@ -308,15 +311,19 @@ export class CommandComponent implements OnInit {
       advance: demande.advance || 0,
       returnStatus: demande.returnStatus || '',
       deposit: demande.deposit || 0,
-      items: demande.items || [
+      items: (demande.items || [
         {
           article: '',
           unitPrice: 0,
           quantity: 1,
           fireFee: 0,
-          shippingFee: 0
+          shippingFee: 0,
+          deposit: 0
         }
-      ]
+      ]).map((item: any) => ({
+        ...item,
+        deposit: item.deposit || 0
+      }))
     };
     // Aller à l'étape 1 du formulaire pour édition
     this.step = 1;
@@ -358,7 +365,8 @@ export class CommandComponent implements OnInit {
       unitPrice: 0,
       quantity: 1,
       fireFee: 0,
-      shippingFee: 0
+      shippingFee: 0,
+      deposit: 0 // Ajout du champ deposit pour chaque item
     });
   }
 
@@ -377,12 +385,62 @@ export class CommandComponent implements OnInit {
     }, 0);
   }
 
+  getTotalCaution(demande: any): number {
+    if (!demande.items || !Array.isArray(demande.items)) return 0;
+    return demande.items.reduce((sum: number, item: { deposit: number; quantity: number; }) => {
+      const cautionAmount = Number(item.deposit) || 0;
+      const quantity = Number(item.quantity) || 0;
+      return sum + cautionAmount * quantity;
+    }, 0);
+  }
+
   getReste(demande: any): number {
     if (!demande || typeof demande.advance !== 'number' || typeof demande.totalAmount !== 'number') {
       // convert to number to avoid NaN issues
       demande.advance = Number(demande.advance) || 0;
-      demande.totalAmount = Number(demande.totalAmount) || 0;
+      demande.totalAmount = this.getTotalAmount(demande) || 0;
     }
     return demande.totalAmount - demande.advance;
   }
+
+  showRecap = false;
+
+  getRecapMessage(demande: any): string {
+    if (!demande) return '';
+
+    const articles = (demande.items || [])
+      .map((item: any) => `• ${item.article} x${item.quantity} à ${item.unitPrice}€/unité`)
+      .join('\n');
+
+    return (
+      `Bonjour ${demande.clientName},
+Merci pour votre commande du ${this.formatDate(demande.deliveryDate)}.
+
+Résumé du besoin :
+${articles}
+__________________
+- Total : ${this.getTotalAmount(demande)} €
+- Avance versée : ${demande.advance} €
+- Reste à régler : ${this.getReste(demande)} €
+
+Récupération prévue avant le: ${this.formatDate(demande.deliveryDate)}
+La caution d'un montant de : ${this.getTotalCaution(demande)} € sera déposée lors de la récupération des articles.
+
+Pour rappel, les articles sont à retourner dans un état propre et fonctionnel.
+En cas de non-retour propre et fonctionnel, la caution sera conservée.
+
+Nous restons à votre disposition pour toute question.
+Cordialement.
+      `
+    );
+  }
+
+  private formatDate(date: string): string {
+    if (!date) return '';
+    const d = new Date(date);
+    if (isNaN(d.getTime())) return date;
+    return d.toISOString().slice(0, 10);
+  }
+
+  // ...existing code...
 }
