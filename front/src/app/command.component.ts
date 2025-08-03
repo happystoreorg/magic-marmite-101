@@ -51,7 +51,7 @@ export class CommandComponent implements OnInit {
   private readonly apiUrlCible = 'http://192.168.1.180:3000/api';
 
   get apiEndpoint(): string {
-    return this.apiUrlCible; // Utilise l'URL définie dans environment.ts ou environment.prod.ts
+    return this.apiUrl; // Utilise l'URL définie dans environment.ts ou environment.prod.ts
   }
 
   // Objet pour stocker les données du formulaire
@@ -375,5 +375,14 @@ export class CommandComponent implements OnInit {
       const quantity = Number(item.quantity) || 0;
       return sum + unitPrice * quantity;
     }, 0);
+  }
+
+  getReste(demande: any): number {
+    if (!demande || typeof demande.advance !== 'number' || typeof demande.totalAmount !== 'number') {
+      // convert to number to avoid NaN issues
+      demande.advance = Number(demande.advance) || 0;
+      demande.totalAmount = Number(demande.totalAmount) || 0;
+    }
+    return demande.totalAmount - demande.advance;
   }
 }

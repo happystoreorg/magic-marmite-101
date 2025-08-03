@@ -218,6 +218,7 @@
                 <th>Client</th>
                 <th>Plateforme</th>
                 <th>Téléphone</th>
+                <th>Avance percue (€)</th>
                 <th>Montant total (€)</th>
                 <!-- <th>Statut retour</th> -->
               </tr>
@@ -226,13 +227,14 @@
               <tr *ngFor="let demande of paginatedDemandes"
                   [class.table-primary]="isDeliverySoon(demande.deliveryDate)"
                   [class.table-active]="selectedDemande && selectedDemande.id === demande.id"
-                  [ngStyle]="selectedDemande && selectedDemande.id === demande.id ? {'background-color': '#ffcc00', 'border-left': '5px solid #ffcc00', 'border-bottom': '1px solid #ffcc00'} : {}"
+                  [ngStyle]="selectedDemande && selectedDemande.id === demande.id ? {'background-color': '#ffcc00', 'border-left': '5px solid #ffcc00'} : {}"
                   style="cursor:pointer"
                   (click)="onSelectDemande(demande)">
                 <td>{{ demande.deliveryDate | date:'yyyy-MM-dd' }}</td>
                 <td>{{ demande.clientName }}</td>
                 <td>{{ demande.platform }}</td>
                 <td>{{ demande.phone }}</td>
+                <td>{{ demande.advance }} €</td>
                 <td>
                     {{ getTotalAmount(demande) || '0' }} €
                 </td>               
@@ -247,6 +249,68 @@
               </tr>
             </tbody>
           </table>
+
+        </div>
+        
+        <!-- Section détail exhaustif de la demande sélectionnée -->
+        @if (selectedDemande) {
+          <hr>
+          <div class="container-fluid py-3">
+            <h5 class="mb-3 text-secondary">Détail de la demande sélectionnée</h5>
+            <div class="row mb-2">
+              <div class="col-md-4"><strong>Nom du client :</strong> {{ selectedDemande.clientName }}</div>
+              <div class="col-md-4"><strong>Téléphone :</strong> {{ selectedDemande.phone }}</div>
+              <div class="col-md-4"><strong>Plateforme :</strong> {{ selectedDemande.platform }}</div>
+            </div>
+            <div class="row mb-2">
+              <div class="col-md-4"><strong>Date de contact :</strong> {{ selectedDemande.contactDate | date:'yyyy-MM-dd' }}</div>
+              <div class="col-md-4"><strong>Date de livraison :</strong> {{ selectedDemande.deliveryDate | date:'yyyy-MM-dd' }}</div>
+              <div class="col-md-4"><strong>Caution :</strong> {{ selectedDemande.deposit }} €</div>
+            </div>
+            <div class="row mb-2">
+              <div class="col-md-4">
+                <strong>Montant total de la commande :</strong>
+                {{ getTotalAmount(selectedDemande) }} €
+              </div>
+              <div class="col-md-4"><strong>Avance perçue :</strong> {{ selectedDemande.advance }} €</div>
+              <div class="col-md-4"><strong>Reste à régler :</strong> {{ getReste(selectedDemande) }} €</div>
+            </div>
+            <div class="row mb-2">
+              <div class="col-md-4"><strong>Frais de livraison/retour :</strong> {{ selectedDemande.shippingFee }} €</div>
+              <div class="col-md-4"><strong>Retour effectué : </strong>
+                <span *ngIf="selectedDemande.returnStatus === 'oui'" class="badge bg-success"> Oui </span>
+                <span *ngIf="selectedDemande.returnStatus === 'non'" class="badge bg-danger"> Non </span>
+                <span *ngIf="!selectedDemande.returnStatus" class="badge bg-secondary">-</span>
+              </div>
+            </div>
+            <div class="mb-2">
+              <strong>Articles commandés :</strong>
+              <table class="table table-sm table-bordered mt-2">
+                <thead>
+                  <tr>
+                    <th>Article</th>
+                    <th>Prix unitaire (€)</th>
+                    <th>Quantité</th>
+                    <th>Frais feu (€)</th>
+                    <th>Frais livraison (€)</th>
+                    <th>Total (€)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of selectedDemande.items">
+                    <td>{{ item.article }}</td>
+                    <td>{{ item.unitPrice }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>{{ item.fireFee }}</td>
+                    <td>{{ item.shippingFee }}</td>
+                    <td>{{ (item.unitPrice * item.quantity) + (item.fireFee || 0) + (item.shippingFee || 0) }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-md-6"><strong>Commentaires :</strong> {{ selectedDemande.comments }}</div>
+          </div>
+
           <!-- Actions pour la ligne sélectionnée -->
           <div *ngIf="selectedDemande" class="mb-3 d-flex gap-2 align-items-center">
             <span class="fw-bold text-primary">Action sur la sélection :</span>
@@ -258,8 +322,10 @@
               Annuler
             </button>
           </div>
-        </div>
+        }
       </div>
+
+
       <!-- Nouvel onglet DASHBOARD -->
       <div class="tab-pane fade"
            [class.show]="activeTab === 'dashboard'"
