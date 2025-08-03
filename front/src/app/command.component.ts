@@ -51,7 +51,7 @@ export class CommandComponent implements OnInit {
   private readonly apiUrlCible = 'http://192.168.1.180:3000/api';
 
   get apiEndpoint(): string {
-    return this.apiUrl; // Utilise l'URL définie dans environment.ts ou environment.prod.ts
+    return this.apiUrlCible; // Utilise l'URL définie dans environment.ts ou environment.prod.ts
   }
 
   // Objet pour stocker les données du formulaire
