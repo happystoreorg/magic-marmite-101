@@ -23,7 +23,6 @@ interface DemandeLocation {
   advance: number;
   returnStatus: string;
   shippingFee: number;
-  deposit: number;
 
   // Liste des articles pour la commande
   items: Array<{
@@ -70,7 +69,6 @@ export class CommandComponent implements OnInit {
     deliveryDate: '',
     advance: 0,
     returnStatus: '',
-    deposit: 0,
     items: [
       {
         article: '',
@@ -108,6 +106,7 @@ export class CommandComponent implements OnInit {
     'Direct | Nora',  
     'Autre'
   ];
+
   readonly articleOptions = [
     'Chauffe-plat doré circulaire', 
     'Chauffe-plat argenté rectangulaire', 
@@ -261,7 +260,6 @@ export class CommandComponent implements OnInit {
       deliveryDate: '',
       advance: 0,
       returnStatus: '',
-      deposit: 0,
       items: [
         {
           article: '',
@@ -310,7 +308,6 @@ export class CommandComponent implements OnInit {
       deliveryDate: demande.deliveryDate || '',
       advance: demande.advance || 0,
       returnStatus: demande.returnStatus || '',
-      deposit: demande.deposit || 0,
       items: (demande.items || [
         {
           article: '',
