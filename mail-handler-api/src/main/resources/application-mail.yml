@@ -1,0 +1,44 @@
+spring:
+  mail:
+    host: imap.gmail.com
+    port: 993
+    username: '${EMAIL_USER_MAIL_HANDLER}' #your email address
+    password: '${EMAIL_PWD_MAIL_HANDLER}' #app password from google
+    protocol: imaps
+    properties:
+      mail:
+        imap:
+          ssl:
+            enable: true
+
+credentials:
+  mail:
+    gueukam:
+      username: '${EMAIL_USER_MAIL_HANDLER_GUEUKAM}' #your email address
+      password: '${EMAIL_PWD_MAIL_HANDLER_GUEUKAM}' #app password from google
+    default:
+      username: '${EMAIL_USER_MAIL_HANDLER}' #your email address
+      password: '${EMAIL_PWD_MAIL_HANDLER}' #app password from google
+
+# ---
+# spring:
+#   mail:
+#     host: smtp.gmail.com
+#     port: 587
+#     username: '${EMAIL_USER_MAIL_HANDLER}' #your email address
+#     password: '${EMAIL_PWD_MAIL_HANDLER}' #app password from google
+#     protocol: smtp
+#     properties:
+#       mail:
+#         imap:
+#           ssl:
+#             enable: true
+#         smtp:
+#           auth: true
+#           starttls:
+#             enable: true
+#             required: true
+#           connectiontimeout: 60000
+#           timeout: 60000
+#           writetimeout: 60000
+

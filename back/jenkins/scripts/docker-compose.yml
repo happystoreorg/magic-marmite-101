@@ -8,6 +8,8 @@ services:
       - "3000:3001"
     environment: {}
     restart: unless-stopped
+    volumes:
+      - /home/lab2/data-api/:/app/data/
     # volumes:
     #   - ../../:/app  # Décommente pour le développement local si besoin
 

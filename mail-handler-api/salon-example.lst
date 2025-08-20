@@ -1,0 +1,4 @@
+name, owner, address, openedHours, compagnieType, prestation, produitAnnexe, gestionnaireName
+A, B, C, D, A, B, C, D
+A2, B, C, D, A, B, C, D
+A2, B4, C, D, A, B, C, D

@@ -1,0 +1,67 @@
+# Default configuration for the application
+# This file is used to configure the application properties
+# It is a YAML file, which is a human-readable data serialization format
+# It is commonly used for configuration files and in applications where data is being stored or transmitted
+# in a format that is easy to read and write for humans.
+# The file is structured in a way that allows for easy nesting of properties and values
+# The file is divided into sections, each section is indicated by a key followed by a colon
+# The key can be a simple string or a nested key, which is indicated by a dot (.)
+# The value can be a simple string, a list of values, or a nested structure
+# The file is divided into sections, each section is indicated by a key followed by a colon
+spring:
+    profiles:
+      active:  local,mail
+
+---
+spring:
+  main:
+    banner-mode: "off"
+    allow-bean-definition-overriding: true
+  application:
+    name: test-app
+  h2:
+    console:
+      path: /h2-console
+      enabled: true
+      settings.web-allow-others: true
+
+  datasource:
+    #url: jdbc:h2:mem:testdb
+    url: jdbc:h2:file:./target/data/mailhandlerdb;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate.ddl-auto: update
+
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+    enabled: true
+    
+logging:
+  level:
+    # root: info
+    com.happystore.hairdresser: DEBUG
+    org.springframework:
+      #boot.autoconfigure: DEBUG
+      mail: DEBUG
+  #pattern:
+    #console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+hairdresser.test : ${ENV_HAIRDRESSER_TEST:not_defined_yet}
+
+demandes:
+  api:
+    url: "http://localhost:3001/api/demandes"
+
+---
+spring:
+  config.activate.on-profile: cible
+  datasource:
+    #url: jdbc:h2:mem:testdb
+    url: jdbc:h2:file:/app/data/mailhandlerdb;DB_CLOSE_ON_EXIT=FALSE;AUTO_RECONNECT=TRUE
+
+demandes:
+  api:
+    url: "http://makepe.freeboxos.fr:32769/api/demandes"

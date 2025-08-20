@@ -1,0 +1,154 @@
+2025-02-15 18:28:55.286652+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SALON" not found (this database is empty); SQL statement:
+select s1_0.id,s1_0.address,s1_0.compagnie_type,s1_0.gestionnaire_name,s1_0.name,s1_0.opened_hours,s1_0.owner,s1_0.prestation,s1_0.produit_annexe from salon s1_0 [42104-232]
+2025-02-15 18:31:22.980657+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "SALON" not found (this database is empty); SQL statement:
+select s1_0.id,s1_0.address,s1_0.compagnie_type,s1_0.gestionnaire_name,s1_0.name,s1_0.opened_hours,s1_0.owner,s1_0.prestation,s1_0.produit_annexe from salon s1_0 [42104-232]
+2025-02-20 20:45:53.915233+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "alter table if exists appointment add column [*]user varchar(255)"; attendu "identifier"
+Syntax error in SQL statement "alter table if exists appointment add column [*]user varchar(255)"; expected "identifier"; SQL statement:
+alter table if exists appointment add column user varchar(255) [42001-232]
+2025-03-05 17:01:36.630792+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "alter table if exists appointment add column [*]user varchar(255)"; attendu "identifier"
+Syntax error in SQL statement "alter table if exists appointment add column [*]user varchar(255)"; expected "identifier"; SQL statement:
+alter table if exists appointment add column user varchar(255) [42001-232]
+2025-03-05 17:03:08.508085+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "alter table if exists appointment add column [*]user varchar(255)"; attendu "identifier"
+Syntax error in SQL statement "alter table if exists appointment add column [*]user varchar(255)"; expected "identifier"; SQL statement:
+alter table if exists appointment add column user varchar(255) [42001-232]
+2025-03-05 17:50:14.987494+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "alter table if exists appointment add column [*]user varchar(255)"; attendu "identifier"
+Syntax error in SQL statement "alter table if exists appointment add column [*]user varchar(255)"; expected "identifier"; SQL statement:
+alter table if exists appointment add column user varchar(255) [42001-232]
+2025-03-05 17:50:27.592275+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "alter table if exists appointment add column [*]user varchar(255)"; attendu "identifier"
+Syntax error in SQL statement "alter table if exists appointment add column [*]user varchar(255)"; expected "identifier"; SQL statement:
+alter table if exists appointment add column user varchar(255) [42001-232]
+2025-03-05 17:51:24.796284+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "alter table if exists appointment add column [*]user varchar(255)"; attendu "identifier"
+Syntax error in SQL statement "alter table if exists appointment add column [*]user varchar(255)"; expected "identifier"; SQL statement:
+alter table if exists appointment add column user varchar(255) [42001-232]
+2025-03-07 00:22:30.599056+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "alter table if exists appointment add column [*]user varchar(255)"; attendu "identifier"
+Syntax error in SQL statement "alter table if exists appointment add column [*]user varchar(255)"; expected "identifier"; SQL statement:
+alter table if exists appointment add column user varchar(255) [42001-232]
+2025-03-12 17:45:50.880039+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "alter table if exists appointment add column [*]user varchar(255)"; attendu "identifier"
+Syntax error in SQL statement "alter table if exists appointment add column [*]user varchar(255)"; expected "identifier"; SQL statement:
+alter table if exists appointment add column user varchar(255) [42001-232]
+2025-03-12 17:59:38.535701+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "select a1_0.id,a1_0.creneau_horaire,a1_0.prestation_id,a1_0.salon_id,a1_0.[*]user from appointment a1_0"; attendu "identifier"
+Syntax error in SQL statement "select a1_0.id,a1_0.creneau_horaire,a1_0.prestation_id,a1_0.salon_id,a1_0.[*]user from appointment a1_0"; expected "identifier"; SQL statement:
+select a1_0.id,a1_0.creneau_horaire,a1_0.prestation_id,a1_0.salon_id,a1_0.user from appointment a1_0 [42001-232]
+2025-03-12 17:59:42.687734+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "select a1_0.id,a1_0.creneau_horaire,a1_0.prestation_id,a1_0.salon_id,a1_0.[*]user from appointment a1_0"; attendu "identifier"
+Syntax error in SQL statement "select a1_0.id,a1_0.creneau_horaire,a1_0.prestation_id,a1_0.salon_id,a1_0.[*]user from appointment a1_0"; expected "identifier"; SQL statement:
+select a1_0.id,a1_0.creneau_horaire,a1_0.prestation_id,a1_0.salon_id,a1_0.user from appointment a1_0 [42001-232]
+2025-03-23 16:20:30.728579+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "alter table if exists appointment add column [*]user varchar(255)"; attendu "identifier"
+Syntax error in SQL statement "alter table if exists appointment add column [*]user varchar(255)"; expected "identifier"; SQL statement:
+alter table if exists appointment add column user varchar(255) [42001-232]
+2025-03-23 16:23:47.722159+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "alter table if exists appointment add column [*]user varchar(255)"; attendu "identifier"
+Syntax error in SQL statement "alter table if exists appointment add column [*]user varchar(255)"; expected "identifier"; SQL statement:
+alter table if exists appointment add column user varchar(255) [42001-232]
+2025-03-23 16:24:45.056627+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "alter table if exists appointment add column [*]user varchar(255)"; attendu "identifier"
+Syntax error in SQL statement "alter table if exists appointment add column [*]user varchar(255)"; expected "identifier"; SQL statement:
+alter table if exists appointment add column user varchar(255) [42001-232]
+2025-03-23 16:27:15.535736+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "alter table if exists appointment add column [*]user varchar(255)"; attendu "identifier"
+Syntax error in SQL statement "alter table if exists appointment add column [*]user varchar(255)"; expected "identifier"; SQL statement:
+alter table if exists appointment add column user varchar(255) [42001-232]
+2025-03-23 16:30:05.289774+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "alter table if exists appointment add column [*]user varchar(255)"; attendu "identifier"
+Syntax error in SQL statement "alter table if exists appointment add column [*]user varchar(255)"; expected "identifier"; SQL statement:
+alter table if exists appointment add column user varchar(255) [42001-232]
+2025-03-23 16:31:53.714855+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "alter table if exists appointment add column [*]user varchar(255)"; attendu "identifier"
+Syntax error in SQL statement "alter table if exists appointment add column [*]user varchar(255)"; expected "identifier"; SQL statement:
+alter table if exists appointment add column user varchar(255) [42001-232]
+2025-03-23 17:08:32.710371+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "alter table if exists appointment add column [*]user varchar(255)"; attendu "identifier"
+Syntax error in SQL statement "alter table if exists appointment add column [*]user varchar(255)"; expected "identifier"; SQL statement:
+alter table if exists appointment add column user varchar(255) [42001-232]
+2025-03-23 17:11:06.167328+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "alter table if exists appointment add column [*]user varchar(255)"; attendu "identifier"
+Syntax error in SQL statement "alter table if exists appointment add column [*]user varchar(255)"; expected "identifier"; SQL statement:
+alter table if exists appointment add column user varchar(255) [42001-232]
+2025-03-23 17:21:45.893365+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "alter table if exists appointment add column [*]user varchar(255)"; attendu "identifier"
+Syntax error in SQL statement "alter table if exists appointment add column [*]user varchar(255)"; expected "identifier"; SQL statement:
+alter table if exists appointment add column user varchar(255) [42001-232]
+2025-03-23 17:23:03.484088+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "alter table if exists appointment add column [*]user varchar(255)"; attendu "identifier"
+Syntax error in SQL statement "alter table if exists appointment add column [*]user varchar(255)"; expected "identifier"; SQL statement:
+alter table if exists appointment add column user varchar(255) [42001-232]
+2025-03-23 17:40:18.180985+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "alter table if exists appointment add column [*]user varchar(255)"; attendu "identifier"
+Syntax error in SQL statement "alter table if exists appointment add column [*]user varchar(255)"; expected "identifier"; SQL statement:
+alter table if exists appointment add column user varchar(255) [42001-232]
+2025-03-23 17:49:11.494524+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "alter table if exists appointment add column [*]user varchar(255)"; attendu "identifier"
+Syntax error in SQL statement "alter table if exists appointment add column [*]user varchar(255)"; expected "identifier"; SQL statement:
+alter table if exists appointment add column user varchar(255) [42001-232]
+2025-03-23 17:51:04.190830+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "alter table if exists appointment add column [*]user varchar(255)"; attendu "identifier"
+Syntax error in SQL statement "alter table if exists appointment add column [*]user varchar(255)"; expected "identifier"; SQL statement:
+alter table if exists appointment add column user varchar(255) [42001-232]
+2025-03-23 18:05:32.937048+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "alter table if exists appointment add column [*]user varchar(255)"; attendu "identifier"
+Syntax error in SQL statement "alter table if exists appointment add column [*]user varchar(255)"; expected "identifier"; SQL statement:
+alter table if exists appointment add column user varchar(255) [42001-232]
+2025-03-23 18:58:24.437710+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "alter table if exists appointment add column [*]user varchar(255)"; attendu "identifier"
+Syntax error in SQL statement "alter table if exists appointment add column [*]user varchar(255)"; expected "identifier"; SQL statement:
+alter table if exists appointment add column user varchar(255) [42001-232]
+2025-03-23 18:58:28.149533+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "alter table if exists appointment add column [*]user varchar(255)"; attendu "identifier"
+Syntax error in SQL statement "alter table if exists appointment add column [*]user varchar(255)"; expected "identifier"; SQL statement:
+alter table if exists appointment add column user varchar(255) [42001-232]
+2025-03-23 19:13:33.653989+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "alter table if exists appointment add column [*]user varchar(255)"; attendu "identifier"
+Syntax error in SQL statement "alter table if exists appointment add column [*]user varchar(255)"; expected "identifier"; SQL statement:
+alter table if exists appointment add column user varchar(255) [42001-232]
+2025-03-23 19:38:10.109459+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "alter table if exists appointment add column [*]user varchar(255)"; attendu "identifier"
+Syntax error in SQL statement "alter table if exists appointment add column [*]user varchar(255)"; expected "identifier"; SQL statement:
+alter table if exists appointment add column user varchar(255) [42001-232]
+2025-03-27 14:18:50.300909+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "alter table if exists appointment add column [*]user varchar(255)"; attendu "identifier"
+Syntax error in SQL statement "alter table if exists appointment add column [*]user varchar(255)"; expected "identifier"; SQL statement:
+alter table if exists appointment add column user varchar(255) [42001-232]
+2025-03-27 14:18:50.304695+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "create table [*]user (id bigint generated by default as identity, email varchar(255), first_name varchar(255), last_name varchar(255), phone_number varchar(255), primary key (id))"; attendu "identifier"
+Syntax error in SQL statement "create table [*]user (id bigint generated by default as identity, email varchar(255), first_name varchar(255), last_name varchar(255), phone_number varchar(255), primary key (id))"; expected "identifier"; SQL statement:
+create table user (id bigint generated by default as identity, email varchar(255), first_name varchar(255), last_name varchar(255), phone_number varchar(255), primary key (id)) [42001-232]
+2025-03-27 14:21:19.302715+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "select u1_0.id,u1_0.email,u1_0.first_name,u1_0.last_name,u1_0.phone_number from [*]user u1_0 where u1_0.id=?"; attendu "identifier"
+Syntax error in SQL statement "select u1_0.id,u1_0.email,u1_0.first_name,u1_0.last_name,u1_0.phone_number from [*]user u1_0 where u1_0.id=?"; expected "identifier"; SQL statement:
+select u1_0.id,u1_0.email,u1_0.first_name,u1_0.last_name,u1_0.phone_number from user u1_0 where u1_0.id=? [42001-232]
+2025-03-27 14:21:46.832355+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "insert into [*]user (email,first_name,last_name,phone_number,id) values (?,?,?,?,default)"; attendu "identifier"
+Syntax error in SQL statement "insert into [*]user (email,first_name,last_name,phone_number,id) values (?,?,?,?,default)"; expected "identifier"; SQL statement:
+insert into user (email,first_name,last_name,phone_number,id) values (?,?,?,?,default) [42001-232]
+2025-03-27 14:22:56.858247+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "select u1_0.id,u1_0.email,u1_0.first_name,u1_0.last_name,u1_0.phone_number from [*]user u1_0"; attendu "identifier"
+Syntax error in SQL statement "select u1_0.id,u1_0.email,u1_0.first_name,u1_0.last_name,u1_0.phone_number from [*]user u1_0"; expected "identifier"; SQL statement:
+select u1_0.id,u1_0.email,u1_0.first_name,u1_0.last_name,u1_0.phone_number from user u1_0 [42001-232]
+2025-03-27 14:24:23.519427+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "alter table if exists appointment add column [*]user varchar(255)"; attendu "identifier"
+Syntax error in SQL statement "alter table if exists appointment add column [*]user varchar(255)"; expected "identifier"; SQL statement:
+alter table if exists appointment add column user varchar(255) [42001-232]
+2025-03-27 14:24:23.523354+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "create table [*]user (id bigint generated by default as identity, email varchar(255), first_name varchar(255), last_name varchar(255), phone_number varchar(255), primary key (id))"; attendu "identifier"
+Syntax error in SQL statement "create table [*]user (id bigint generated by default as identity, email varchar(255), first_name varchar(255), last_name varchar(255), phone_number varchar(255), primary key (id))"; expected "identifier"; SQL statement:
+create table user (id bigint generated by default as identity, email varchar(255), first_name varchar(255), last_name varchar(255), phone_number varchar(255), primary key (id)) [42001-232]
+2025-03-27 14:25:32.387522+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "alter table if exists appointment add column [*]user varchar(255)"; attendu "identifier"
+Syntax error in SQL statement "alter table if exists appointment add column [*]user varchar(255)"; expected "identifier"; SQL statement:
+alter table if exists appointment add column user varchar(255) [42001-232]
+2025-03-27 14:25:37.905309+01:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Erreur de syntaxe dans l'instruction SQL "alter table if exists appointment add column [*]user varchar(255)"; attendu "identifier"
+Syntax error in SQL statement "alter table if exists appointment add column [*]user varchar(255)"; expected "identifier"; SQL statement:
+alter table if exists appointment add column user varchar(255) [42001-232]

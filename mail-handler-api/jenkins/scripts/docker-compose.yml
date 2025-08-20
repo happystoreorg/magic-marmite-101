@@ -1,0 +1,13 @@
+#version: '3'
+
+services:
+  mail-handler-api:
+    image: mail-handler-api:latest
+    container_name: mail-handler-api-container
+    restart: unless-stopped
+    ports:
+      - 8088:8080
+    volumes:
+      - /home/lab2/data-api/:/app/data/
+    env_file: env_file_name
+    

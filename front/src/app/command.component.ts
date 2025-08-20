@@ -41,10 +41,10 @@ export class CommandComponent implements OnInit {
 
   // Utilisation dynamique de l'URL API selon l'environnement
   private readonly apiUrl = 'http://localhost:3001/api';
-  private readonly apiUrlCible = 'http://192.168.1.180:3000/api';
+  private readonly apiUrlCible = 'http://makepe.freeboxos.fr:32769/api';
 
   get apiEndpoint(): string {
-    return this.apiUrl; // Utilise l'URL définie dans environment.ts ou environment.prod.ts
+    return this.apiUrlCible; // Utilise l'URL définie dans environment.ts ou environment.prod.ts
   }
 
   // Objet pour stocker les données du formulaire
