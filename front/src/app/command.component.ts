@@ -13,24 +13,17 @@ interface DemandeLocation {
   phone: string;
   
   // Étape 2 - Détails de la commande
-  article: string;
-  unitPrice: number;
-  quantity: number;
-  fireFee: number;
   deliveryDate: string;
   
   // Étape 3 - Paiement et retour
   advance: number;
   returnStatus: string;
-  shippingFee: number;
 
   // Liste des articles pour la commande
   items: Array<{
     article: string;
     unitPrice: number;
     quantity: number;
-    fireFee: number;
-    shippingFee: number;
     deposit: number; // Ajout du champ deposit pour chaque item
   }>;
 }
@@ -61,11 +54,6 @@ export class CommandComponent implements OnInit {
     contactDate: '',
     comments: '',
     phone: '',
-    article: '',
-    unitPrice: 0,
-    quantity: 1,
-    fireFee: 0,
-    shippingFee: 0,
     deliveryDate: '',
     advance: 0,
     returnStatus: '',
@@ -74,8 +62,6 @@ export class CommandComponent implements OnInit {
         article: '',
         unitPrice: 0,
         quantity: 1,
-        fireFee: 0,
-        shippingFee: 0,
         deposit: 0 // Ajout du champ deposit pour chaque item
       }
     ]
@@ -209,10 +195,6 @@ export class CommandComponent implements OnInit {
         throw new Error('Le nom du client est obligatoire');
       }
       
-      if (this.formData.quantity < 1) {
-        throw new Error('La quantité doit être d\'au moins 1');
-      }
-      
       // Envoyer les données au backend
       this.http.post(`${this.apiEndpoint}/demandes`, this.formData).subscribe({
         next: (result) => {
@@ -252,11 +234,6 @@ export class CommandComponent implements OnInit {
       contactDate: '',
       comments: '',
       phone: '',
-      article: '',
-      unitPrice: 0,
-      quantity: 1,
-      fireFee: 0,
-      shippingFee: 0,
       deliveryDate: '',
       advance: 0,
       returnStatus: '',
@@ -265,8 +242,6 @@ export class CommandComponent implements OnInit {
           article: '',
           unitPrice: 0,
           quantity: 1,
-          fireFee: 0,
-          shippingFee: 0,
           deposit: 0 // Ajout du champ deposit pour chaque item
         }
       ]
@@ -284,6 +259,11 @@ export class CommandComponent implements OnInit {
   }
 
   isDeliverySoon(deliveryDate: string): boolean {
+    return false;
+    // isDeliverySoonBck 
+  }
+
+  isDeliverySoonBck(deliveryDate: string): boolean {
     if (!deliveryDate) return false;
     const now = new Date();
     const delivery = new Date(deliveryDate);
@@ -300,11 +280,6 @@ export class CommandComponent implements OnInit {
       contactDate: demande.contactDate || '',
       comments: demande.comments || '',
       phone: demande.phone || '',
-      article: demande.article || '',
-      unitPrice: demande.unitPrice || 0,
-      quantity: demande.quantity || 1,
-      fireFee: demande.fireFee || 0,
-      shippingFee: demande.shippingFee || 0,
       deliveryDate: demande.deliveryDate || '',
       advance: demande.advance || 0,
       returnStatus: demande.returnStatus || '',
@@ -313,8 +288,6 @@ export class CommandComponent implements OnInit {
           article: '',
           unitPrice: 0,
           quantity: 1,
-          fireFee: 0,
-          shippingFee: 0,
           deposit: 0
         }
       ]).map((item: any) => ({
@@ -361,8 +334,6 @@ export class CommandComponent implements OnInit {
       article: '',
       unitPrice: 0,
       quantity: 1,
-      fireFee: 0,
-      shippingFee: 0,
       deposit: 0 // Ajout du champ deposit pour chaque item
     });
   }

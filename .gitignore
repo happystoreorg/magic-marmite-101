@@ -34,3 +34,7 @@ coverage/
 # Exclude all files in the back/data directory
 back/data/*
 back/test-*
+
+note-local.txt
+
+target/

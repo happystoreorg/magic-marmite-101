@@ -21,16 +21,43 @@ if (!fs.existsSync(dataDir)) {
 // Route pour enregistrer une demande de location
 app.post('/api/demandes', (req, res) => {
   try {
+    console.info('POST on /api/demandes', req.body);
     const demande = req.body;
-    
-    // Ajouter un timestamp et un ID unique
+    const allDemandesPath = path.join(dataDir, 'toutes_demandes.json');
+    let toutesLesdemandes = [];
+
+    if (fs.existsSync(allDemandesPath)) {
+      const data = fs.readFileSync(allDemandesPath, 'utf8');
+      toutesLesdemandes = JSON.parse(data);
+    }
+
+    // Si la demande contient un id existant et non null/empty, faire un update (PUT)
+    if (demande.id && typeof demande.id === 'string' && demande.id.trim() !== '' && toutesLesdemandes.some(d => d.id === demande.id)) {
+      const idx = toutesLesdemandes.findIndex(d => d.id === demande.id);
+      toutesLesdemandes[idx] = { ...toutesLesdemandes[idx], ...demande, id: demande.id };
+      fs.writeFileSync(allDemandesPath, JSON.stringify(toutesLesdemandes, null, 2));
+      res.status(200).json({
+        success: true,
+        message: 'Demande mise à jour avec succès',
+        id: demande.id
+      });
+      return;
+    }
+
+    console.info('POST on /api/demandes, creation ID ...');
+
+    // Sinon, création d'une nouvelle demande
+    // Si id est absent, null ou vide, générer un nouvel id
+    let id = demande.id;
+    if (!id || typeof id !== 'string' || id.trim() === '') {
+      id = Date.now().toString();
+    }
     const timestamp = new Date().toISOString();
-    const id = Date.now().toString();
-    
     const demandeComplete = {
       id,
       timestamp,
-      ...demande
+      ...demande,
+      id // assure que l'id généré est bien utilisé
     };
 
     // Nom du fichier basé sur la date et l'ID
@@ -40,15 +67,6 @@ app.post('/api/demandes', (req, res) => {
     // Écrire le fichier JSON
     fs.writeFileSync(filePath, JSON.stringify(demandeComplete, null, 2));
 
-    // Également maintenir un fichier de toutes les demandes
-    const allDemandesPath = path.join(dataDir, 'toutes_demandes.json');
-    let toutesLesdemandes = [];
-    
-    if (fs.existsSync(allDemandesPath)) {
-      const data = fs.readFileSync(allDemandesPath, 'utf8');
-      toutesLesdemandes = JSON.parse(data);
-    }
-    
     toutesLesdemandes.push(demandeComplete);
     fs.writeFileSync(allDemandesPath, JSON.stringify(toutesLesdemandes, null, 2));
 
