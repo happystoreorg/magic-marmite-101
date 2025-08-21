@@ -1,0 +1,5 @@
+
+
+      username: '${EMAIL_USER_MAIL_HANDLER_FRANCK}' #your email address
+      password: '${EMAIL_PWD_MAIL_HANDLER_FRANCK}' #app password from google
+

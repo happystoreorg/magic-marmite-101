@@ -19,6 +19,11 @@ credentials:
     default:
       username: '${EMAIL_USER_MAIL_HANDLER}' #your email address
       password: '${EMAIL_PWD_MAIL_HANDLER}' #app password from google
+    franck:
+      username: '${EMAIL_USER_MAIL_HANDLER_FRANCK}' #your email address
+      password: '${EMAIL_PWD_MAIL_HANDLER_FRANCK}' #app password from google
+
+
 
 # ---
 # spring:
