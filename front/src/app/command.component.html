@@ -207,9 +207,10 @@
           <!-- Actions pour la ligne sélectionnée -->
           <div *ngIf="selectedDemande" class="mb-3 d-flex gap-2 align-items-center">
             <span class="fw-bold text-primary">Action sur la sélection :</span>
-            <button class="btn btn-danger btn-sm" (click)="deleteSelectedDemande()" type="button">
+            <!-- Avoid deletion for now. feature will be reactivated later. need to define retoration strategy first -->
+            <!-- <button class="btn btn-danger btn-sm" (click)="deleteSelectedDemande()" type="button">
               Supprimer
-            </button>
+            </button> -->
             <!-- Le bouton "Mettre à jour" a été déplacé à côté du bouton "Enregistrer la demande" dans le formulaire -->
             <button class="btn btn-secondary btn-sm" (click)="selectedDemande = null" type="button">
               Annuler
@@ -245,8 +246,9 @@
           <table class="table table-bordered table-striped">
             <thead>
               <tr>
-                <th>Date de livraison</th>
+                <th>Date de contact</th>
                 <th>Client</th>
+                <th>Date de livraison</th>
                 <th>Plateforme</th>
                 <th>Téléphone</th>
                 <th>Avance percue (€)</th>
@@ -261,8 +263,9 @@
                   [ngStyle]="selectedDemande && selectedDemande.id === demande.id ? {'background-color': '#ffcc00', 'border-left': '5px solid #ffcc00'} : {}"
                   style="cursor:pointer"
                   (click)="onSelectDemande(demande)">
-                <td>{{ demande.deliveryDate | date:'yyyy-MM-dd' }}</td>
+                <td>{{ demande.contactDate | date:'yyyy-MM-dd' }}</td>
                 <td>{{ demande.clientName }}</td>
+                <td>{{ demande.deliveryDate | date:'yyyy-MM-dd' }}</td>
                 <td>{{ demande.platform }}</td>
                 <td>{{ demande.phone }}</td>
                 <td>{{ demande.advance }} €</td>

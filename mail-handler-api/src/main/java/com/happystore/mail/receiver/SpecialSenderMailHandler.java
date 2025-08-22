@@ -25,9 +25,6 @@ import com.happystore.mail.util.DemandeDTOMapper;
 public class SpecialSenderMailHandler implements MailHandler {
     private static final Logger logger = LoggerFactory.getLogger(SpecialSenderMailHandler.class);
 
-    @Autowired
-    private DemandeRestClient demandeRestClient;
-
     @Override
     public String getSender() {
         return "gueukam@gmail.com";
@@ -48,7 +45,7 @@ public class SpecialSenderMailHandler implements MailHandler {
             // demandeRestClient.sendDemande(newDemandes);
             
             // Log the stored demande
-            logger.info("to {}, Demande stored successfully: -> {}", getSender(), demandeDto.getClientName());
+            logger.info("to {}, Demande stored successfully: -> {}", demandeDto.getPlatform(), demandeDto.getClientName());
 
         } catch (Exception e) {
             logger.error("Error processing email content: {}", e.getMessage(), e);

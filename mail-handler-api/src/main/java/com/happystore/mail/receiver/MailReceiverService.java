@@ -143,6 +143,10 @@ public class MailReceiverService {
             return extractTextFromMultipart((Multipart) content);
         }
 
+        //TODO
+        message.getSubject();
+        message.getReceivedDate();
+
         // Si le type est inconnu, retourner une chaîne vide
         return "";
     }

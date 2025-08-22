@@ -75,7 +75,7 @@ export class CommandComponent implements OnInit {
   allDemandes: any[] = [];
   paginatedDemandes: any[] = [];
   currentPage: number = 1;
-  pageSize: number = 10;
+  pageSize: number = 15;
   totalPages: number = 1;
 
   // Demande sélectionnée pour édition
@@ -133,6 +133,9 @@ export class CommandComponent implements OnInit {
     this.http.get<any[]>(`${this.apiEndpoint}/demandes`).subscribe({
       next: (data) => {
         this.allDemandes = Array.isArray(data) ? data : [];
+        this.allDemandes.sort((a, b) => {
+          return new Date(b.contactDate).getTime() - new Date(a.contactDate).getTime();
+        });
         this.updatePagination();
         // Si d'autres tableaux utilisent ces données, mettez-les à jour ici aussi
       },
@@ -300,6 +303,7 @@ export class CommandComponent implements OnInit {
   }
 
   // Suppression d'une demande sélectionnée
+  // Avoid deleteSelectedDemande for now. feature will be reactivated later.
   deleteSelectedDemande() {
     if (!this.selectedDemande?.id) return;
     if (!confirm('Voulez-vous vraiment supprimer cette demande ?')) return;
