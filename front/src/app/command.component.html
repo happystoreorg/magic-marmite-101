@@ -107,12 +107,21 @@
       word-break: break-word;
     }
 
+    .table-responsive-mobile {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
     .table th,
     .table td {
-      max-width: 90vw;
-      white-space: normal;
-      overflow-wrap: break-word;
+      max-width: 160px;
+      white-space: nowrap !important;
+      overflow: hidden;
+      text-overflow: ellipsis;
       padding: 0.4em 0.3em;
+      /* Supprime le retour à la ligne forcé */
+      /* overflow-wrap: unset; */
     }
 
     .d-flex.align-items-center.gap-2,
@@ -137,6 +146,29 @@
 
     .tab-content {
       padding: 0.5em !important;
+    }
+
+    .action-buttons-mobile {
+      display: flex !important;
+      flex-direction: row !important;
+      gap: 0.3em !important;
+      align-items: center !important;
+      justify-content: flex-start !important;
+      width: auto !important;
+      margin-left: 0.5em;
+      margin-right: 0.5em;
+    }
+
+    .action-buttons-mobile .btn {
+      min-width: 60px !important;
+      max-width: 120px !important;
+      font-size: 0.85em !important;
+      padding: 0.35em 0.2em !important;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: auto !important;
+      flex: 0 0 auto !important;
     }
   }
 </style>
@@ -182,12 +214,14 @@
             <div>
             </div>
             <!-- Actions pour la ligne sélectionnée -->
-            <div *ngIf="selectedDemande" class="mb-3 d-flex gap-2 align-items-center">
-              <span class="fw-bold text-primary">Action sur la sélection :</span>
+            <div *ngIf="selectedDemande"
+                 class="mb-12 d-flex gap-1 align-items-center action-buttons-mobile">
+                 
+              <span class="fw-bold text-primary" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Action sur la sélection :</span>
               <!-- Avoid deletion for now. feature will be reactivated later. need to define retoration strategy first -->
               <button class="btn btn-danger btn-sm" (click)="deleteSelectedDemande()" type="button">
-              Supprimer
-            </button> 
+                Supprimer
+              </button> 
               <!-- Le bouton "Mettre à jour" a été déplacé à côté du bouton "Enregistrer la demande" dans le formulaire -->
               <button class="btn btn-secondary btn-sm" (click)="selectedDemande = null" type="button">
                 Annuler
@@ -220,86 +254,90 @@
 
           </div>
 
-          <table class="table table-bordered table-striped" style="background-color: #fff;">
-            <thead style="background-color: #394867; color: #fff;">
-              <tr>
-                <th>Status</th>
-                <th>Contact</th>
-                <th>Client</th>
-                <th>Livraison</th>
-                <th>Plateforme</th>
-                <th>Téléphone</th>
-                <th>Acompte (€)</th>
-                <th>Total (€)</th>
-                <!-- <th>Statut retour</th> -->
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let demande of paginatedDemandes" [class.table-primary]="isDeliverySoon(demande.deliveryDate)"
-                [class.table-active]="selectedDemande && selectedDemande.id === demande.id"
-                [ngStyle]="selectedDemande && selectedDemande.id === demande.id ? {'background-color': '#ffcc00', 'border-left': '5px solid #ffcc00'} : {}"
-                style="cursor:pointer" (click)="onSelectDemande(demande)">
-                <td>
-                  <span class="status-display">
-                    <ng-container [ngSwitch]="demande.status">
-                      <span *ngSwitchCase="'INIT'">
-                        <i class="bi bi-hourglass-split" style="color:#888;"></i>
-                        <span class="status-text status-init">Init</span>
-                      </span>
-                      <span *ngSwitchCase="'PENDING'">
-                        <i class="bi bi-clock" style="color:#f9d949;"></i>
-                        <span class="status-text status-pending">En attente</span>
-                      </span>
-                      <span *ngSwitchCase="'CONFIRMED'">
-                        <i class="bi bi-check2-circle" style="color:#394867;"></i>
-                        <span class="status-text status-confirmed">Confirmée</span>
-                      </span>
-                      <span *ngSwitchCase="'DELIVERED'">
-                        <i class="bi bi-truck" style="color:#232946;"></i>
-                        <span class="status-text status-delivered">Livrée</span>
-                      </span>
-                      <span *ngSwitchCase="'RETURNED'">
-                        <i class="bi bi-arrow-return-left" style="color:#4caf50;"></i>
-                        <span class="status-text status-returned">Restituée</span>
-                      </span>
-                      <span *ngSwitchCase="'ARCHIVED'">
-                        <i class="bi bi-archive" style="color:#888;"></i>
-                        <span class="status-text status-archived">Archivée</span>
-                      </span>
-                      <span *ngSwitchCase="'CANCELLED'">
-                        <i class="bi bi-x-circle" style="color:#e74c3c;"></i>
-                        <span class="status-text status-cancelled">Annulée</span>
-                      </span>
-                      <span *ngSwitchDefault>
-                        <i class="bi bi-question-circle" style="color:#888;"></i>
-                        <span class="status-text">-</span>
-                      </span>
-                    </ng-container>
-                  </span>
-                </td>
-                <td>{{ demande.contactDate | date:'yyyy-MM-dd' }}</td>
-                <td>{{ demande.clientName }}</td>
-                <td>{{ demande.deliveryDate | date:'yyyy-MM-dd' }}</td>
-                <td>{{ demande.platform }}</td>
-                <td>{{ demande.phone }}</td>
-                <td>{{ demande.advance }} €</td>
-                <td>
-                  {{ getTotalAmount(demande) || '0' }} €
-                </td>
-              </tr>
-              <tr *ngIf="paginatedDemandes.length === 0">
-                <td colspan="8" class="text-center text-muted">Aucune demande enregistrée</td>
-              </tr>
-            </tbody>
-          </table>
-          <div class="d-flex align-items-center gap-2">
+          <!-- Tableau des demandes -->
+          <div class="table-responsive-mobile">
+            <table class="table table-bordered table-striped" style="background-color: #fff;">
+              <thead style="background-color: #394867; color: #fff;">
+                <tr>
+                  <th>Status</th>
+                  <th>Contact</th>
+                  <th>Client</th>
+                  <th>Livraison</th>
+                  <th>Plateforme</th>
+                  <th>Téléphone</th>
+                  <th>Acompte (€)</th>
+                  <th>Total (€)</th>
+                  <!-- <th>Statut retour</th> -->
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let demande of paginatedDemandes" [class.table-primary]="isDeliverySoon(demande.deliveryDate)"
+                  [class.table-active]="selectedDemande && selectedDemande.id === demande.id"
+                  [ngStyle]="selectedDemande && selectedDemande.id === demande.id ? {'background-color': '#ffcc00', 'border-left': '5px solid #ffcc00'} : {}"
+                  style="cursor:pointer" (click)="onSelectDemande(demande)">
+                  <td>
+                    <span class="status-display">
+                      <ng-container [ngSwitch]="demande.status">
+                        <span *ngSwitchCase="'INIT'">
+                          <i class="bi bi-hourglass-split" style="color:#888;"></i>
+                          <span class="status-text status-init">Init</span>
+                        </span>
+                        <span *ngSwitchCase="'PENDING'">
+                          <i class="bi bi-clock" style="color:#f9d949;"></i>
+                          <span class="status-text status-pending">En attente</span>
+                        </span>
+                        <span *ngSwitchCase="'CONFIRMED'">
+                          <i class="bi bi-check2-circle" style="color:#394867;"></i>
+                          <span class="status-text status-confirmed">Confirmée</span>
+                        </span>
+                        <span *ngSwitchCase="'DELIVERED'">
+                          <i class="bi bi-truck" style="color:#232946;"></i>
+                          <span class="status-text status-delivered">Livrée</span>
+                        </span>
+                        <span *ngSwitchCase="'RETURNED'">
+                          <i class="bi bi-arrow-return-left" style="color:#4caf50;"></i>
+                          <span class="status-text status-returned">Restituée</span>
+                        </span>
+                        <span *ngSwitchCase="'ARCHIVED'">
+                          <i class="bi bi-archive" style="color:#888;"></i>
+                          <span class="status-text status-archived">Archivée</span>
+                        </span>
+                        <span *ngSwitchCase="'CANCELLED'">
+                          <i class="bi bi-x-circle" style="color:#e74c3c;"></i>
+                          <span class="status-text status-cancelled">Annulée</span>
+                        </span>
+                        <span *ngSwitchDefault>
+                          <i class="bi bi-question-circle" style="color:#888;"></i>
+                          <span class="status-text">-</span>
+                        </span>
+                      </ng-container>
+                    </span>
+                  </td>
+                  <td>{{ demande.contactDate | date:'yyyy-MM-dd' }}</td>
+                  <td>{{ demande.clientName }}</td>
+                  <td>{{ demande.deliveryDate | date:'yyyy-MM-dd' }}</td>
+                  <td>{{ demande.platform }}</td>
+                  <td>{{ demande.phone }}</td>
+                  <td>{{ demande.advance }} €</td>
+                  <td>
+                    {{ getTotalAmount(demande) || '0' }} €
+                  </td>
+                </tr>
+                <tr *ngIf="paginatedDemandes.length === 0">
+                  <td colspan="8" class="text-center text-muted">Aucune demande enregistrée</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="d-flex mb-12 align-items-center gap-1">
             <button class="btn btn-outline-primary btn-sm me-1" style="border-color: #eebbc3; color: #eebbc3;"
               (click)="prevPage()" [disabled]="currentPage === 1">
-              Précédent
+              Page précédente
             </button>
             <button class="btn btn-outline-primary btn-sm" style="border-color: #eebbc3; color: #eebbc3;"
               (click)="nextPage()" [disabled]="currentPage === totalPages">
-              Suivant
+              Page suivante
             </button>
           </div>
         </div>

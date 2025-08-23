@@ -45,7 +45,7 @@ export class CommandComponent implements OnInit {
 
   get apiEndpoint(): string {
     const endpoint = window.location.hostname === 'localhost' 
-      ? this.apiUrl 
+      ? this.apiUrlCible 
       : this.apiUrlCible;
     console.log('Using API endpoint:', endpoint);
     return endpoint;
