@@ -61,11 +61,80 @@
   .status-cancelled {
     color: #e74c3c;
   }
+
+  /* Responsive: mobile layout */
+  @media (max-width: 768px) {
+    .main-flex {
+      flex-direction: column !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+    }
+
+    .bloc-gauche,
+    .bloc-droite {
+      width: 100% !important;
+      min-width: unset !important;
+      padding: 0 !important;
+    }
+
+    .bloc-gauche {
+      position: static !important;
+      top: unset !important;
+      z-index: unset !important;
+      align-self: unset !important;
+    }
+
+    .card {
+      border-radius: 0.5rem !important;
+      margin-bottom: 1rem !important;
+    }
+
+    .border-end {
+      display: none !important;
+    }
+
+    .table {
+      font-size: 0.9em;
+      word-break: break-word;
+    }
+
+    .table th,
+    .table td {
+      max-width: 90vw;
+      white-space: normal;
+      overflow-wrap: break-word;
+      padding: 0.4em 0.3em;
+    }
+
+    .d-flex.align-items-center.gap-2,
+    .d-flex.justify-content-between {
+      flex-direction: column !important;
+      gap: 0.5em !important;
+      align-items: stretch !important;
+    }
+
+    .btn,
+    .btn-lg,
+    .btn-sm {
+      width: 100% !important;
+      margin-bottom: 0.5em !important;
+      font-size: 1em !important;
+    }
+
+    .nav-tabs {
+      flex-wrap: wrap !important;
+      font-size: 1em !important;
+    }
+
+    .tab-content {
+      padding: 0.5em !important;
+    }
+  }
 </style>
 
-<div class="d-flex min-vh-100 px-4" style="font-size: 0.76rem; background-color: #f0f2f5;">
+<div class="d-flex min-vh-100 px-4 main-flex" style="font-size: 0.76rem; background-color: #f0f2f5;">
   <!-- Bloc gauche (30%) -->
-  <div class="d-flex flex-column align-items-start justify-content-start pe-4"
+  <div class="d-flex flex-column align-items-start justify-content-start pe-4 bloc-gauche"
     style="width:15%; min-width:300px; position:sticky; top:0; align-self: flex-start; z-index: 1020;">
     <div class="card shadow-lg w-100 mt-0" style="background-color: #232946; color: #fff; border-radius: 1rem;">
       <div class="card-header" style="background-color: #394867; color: #fff; text-align: center;">
@@ -228,7 +297,7 @@
   <!-- Barre verticale de séparation -->
   <div class="border-end border-2 mx-2" style="height:100vh; border-color: #394867 !important;"></div>
   <!-- Bloc droit (70%) -->
-  <div class="ps-4" style="width:85%;">
+  <div class="ps-4 bloc-droite" style="width:85%;">
     <!-- Onglets dashboard -->
     <ul class="nav nav-tabs mb-3" id="dashboardTabs" role="tablist"
       style="position:sticky; top:0; background:#232946; z-index:1030; border-radius: 0.5rem;">
@@ -397,6 +466,7 @@
             <!-- #detail-block1 Main details block -->
             <div class="col-md-8">
               <h5 class="mb-3" style="color: #eebbc3;">Détail de la demande sélectionnée</h5>
+              <div><strong>Etat de la demande</strong></div>
               <div class="mb-3"><select class="form-select form-select-sm d-inline-block w-auto"
                   [(ngModel)]="selectedDemande.status" (change)="onStatusChange(selectedDemande)">
                   <option value="INIT">Init</option>

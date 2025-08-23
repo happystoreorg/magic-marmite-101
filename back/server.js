@@ -241,6 +241,8 @@ app.patch('/api/demandes/:id', (req, res) => {
     demandes[idx].status = status;
     fs.writeFileSync(allDemandesPath, JSON.stringify(demandes, null, 2));
     res.json({ success: true, message: 'Statut mis à jour', status });
+    console.log('Statut (etat) de la demande mis à jour avec succès');
+
   } catch (error) {
     res.status(500).json({ success: false, message: 'Erreur lors de la mise à jour du statut', error: error.message });
   }

@@ -104,9 +104,15 @@ export class CommandComponent implements OnInit {
     'Autre'
   ];
 
+  isMobile = false;
+
   constructor(private readonly http: HttpClient) {}
 
   ngOnInit() {
+    this.isMobile = window.innerWidth <= 768;
+    window.addEventListener('resize', () => {
+      this.isMobile = window.innerWidth <= 768;
+    });
     this.refreshAllTabs();
   }
 
@@ -419,6 +425,7 @@ Cordialement.
     this.http.patch(`${this.apiEndpoint}/demandes/${demande.id}`, { status: demande.status }).subscribe({
       next: () => {
         // Optionnel : feedback ou refresh
+        console.log('Statut (etat) de la demande mis à jour avec succès');
         this.refreshAllTabs();
       },
       error: (err) => {
