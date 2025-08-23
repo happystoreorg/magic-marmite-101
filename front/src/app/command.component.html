@@ -1,24 +1,88 @@
 <!DOCTYPE html>
 <!-- * * * * * * * * * * * The content below * * * * * * * * * * * * * -->
-<div class="d-flex min-vh-100 bg-light px-4" style="font-size: 0.95rem;">
+<style>
+  /* Forcer le contenu des cellules sur une ligne et masquer le dépassement */
+  .table td,
+  .table th {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 160px;
+    vertical-align: middle;
+  }
+
+  /* Centrer Status (col 1), Acompte (col 7), Total (col 8) */
+  .table td:nth-child(1),
+  .table th:nth-child(1),
+  .table td:nth-child(7),
+  .table th:nth-child(7),
+  .table td:nth-child(8),
+  .table th:nth-child(8) {
+    text-align: center;
+  }
+
+  .status-display {
+    display: flex;
+    align-items: center;
+    gap: 0.35em;
+    font-weight: 500;
+    font-size: 1em;
+  }
+
+  .status-text {
+    font-size: 0.97em;
+    letter-spacing: 0.5px;
+  }
+
+  .status-init {
+    color: #888;
+  }
+
+  .status-pending {
+    color: #f9d949;
+  }
+
+  .status-confirmed {
+    color: #394867;
+  }
+
+  .status-delivered {
+    color: #232946;
+  }
+
+  .status-returned {
+    color: #4caf50;
+  }
+
+  .status-archived {
+    color: #888;
+  }
+
+  .status-cancelled {
+    color: #e74c3c;
+  }
+</style>
+
+<div class="d-flex min-vh-100 px-4" style="font-size: 0.95rem; background-color: #f0f2f5;">
   <!-- Bloc gauche (30%) -->
   <div class="d-flex flex-column align-items-start justify-content-start pe-4"
-       style="width:15%; min-width:300px; position:sticky; top:0; align-self: flex-start; z-index: 1020;">
-    <div class="card shadow-lg w-100 mt-0">
-      <div class="card-header bg-primary text-white text-center">
-        <h2 class="mb-0">Demande de location de matériel</h2>
-        <small>Pour évènementiel</small>
+    style="width:15%; min-width:300px; position:sticky; top:0; align-self: flex-start; z-index: 1020;">
+    <div class="card shadow-lg w-100 mt-0" style="background-color: #232946; color: #fff; border-radius: 1rem;">
+      <div class="card-header" style="background-color: #394867; color: #fff; text-align: center;">
+        <h2 class="mb-0" style="color: #f7f7f7;">Demande de location de matériel</h2>
+        <small style="color: #c7c7c7;">Pour évènementiel</small>
       </div>
-      <div class="card-body">
+      <div class="card-body" style="background-color: #232946;">
         <!-- Formulaire en 3 étapes -->
         <form (submit)="onSubmitForm($event)">
           <!-- Étape 1 : Informations client et contact -->
           @if (step === 1) {
           <div id="step1">
-            <h5 class="mb-3">1. Informations client</h5>
+            <h5 class="mb-3" style="color: #eebbc3;">1. Informations client</h5>
             <div class="mb-3">
               <label for="clientName" class="form-label">Nom du client</label>
-              <input type="text" id="clientName" name="clientName" class="form-control" required [(ngModel)]="formData.clientName">
+              <input type="text" id="clientName" name="clientName" class="form-control" required
+                [(ngModel)]="formData.clientName">
             </div>
             <div class="mb-3">
               <label for="platform" class="form-label">Plateforme de contact</label>
@@ -29,30 +93,36 @@
             </div>
             <div class="mb-3">
               <label for="contactDate" class="form-label">Date de prise de contact</label>
-              <input type="date" id="contactDate" name="contactDate" class="form-control" [(ngModel)]="formData.contactDate">
+              <input type="date" id="contactDate" name="contactDate" class="form-control"
+                [(ngModel)]="formData.contactDate">
             </div>
             <div class="mb-3">
               <label for="comments" class="form-label">Commentaires</label>
-              <textarea id="comments" name="comments" class="form-control" rows="2" [(ngModel)]="formData.comments"></textarea>
+              <textarea id="comments" name="comments" class="form-control" rows="2"
+                [(ngModel)]="formData.comments"></textarea>
             </div>
             <div class="mb-3">
               <label for="phone" class="form-label">Numéro de téléphone</label>
-              <input type="tel" id="phone" name="phone" class="form-control" pattern="^(\+?\d{1,3}[- ]?)?\d{6,14}$" [(ngModel)]="formData.phone">
+              <input type="tel" id="phone" name="phone" class="form-control" pattern="^(\+?\d{1,3}[- ]?)?\d{6,14}$"
+                [(ngModel)]="formData.phone">
             </div>
             <div class="d-grid">
-              <button type="button" class="btn btn-primary btn-lg" (click)="nextStep()">Suivant</button>
+              <button type="button" class="btn btn-primary btn-lg"
+                style="background-color: #eebbc3; color: #232946; border: none;" (click)="nextStep()">Suivant</button>
             </div>
           </div>
           }
           <!-- Étape 2 : Détails de la commande -->
           @if (step === 2) {
           <div id="step2">
-            <h5 class="mb-3">2. Détails de la commande</h5>
+            <h5 class="mb-3" style="color: #eebbc3;">2. Détails de la commande</h5>
             <div class="mb-3">
               <label for="deliveryDate" class="form-label">Date de livraison souhaitée</label>
-              <input type="date" id="deliveryDate" name="deliveryDate" class="form-control" [(ngModel)]="formData.deliveryDate">
+              <input type="date" id="deliveryDate" name="deliveryDate" class="form-control"
+                [(ngModel)]="formData.deliveryDate">
             </div>
-            <div *ngFor="let item of formData.items; let i = index" class="border rounded p-3 mb-3 bg-white">
+            <div *ngFor="let item of formData.items; let i = index" class="border rounded p-3 mb-3"
+              style="background-color: #394867; color: #fff;">
               <div class="row">
                 <div class="col-12 mb-2">
                   <label class="form-label" style="font-size:0.95rem;">Article souhaité</label>
@@ -63,46 +133,56 @@
                 </div>
                 <div class="col-12 mb-2">
                   <label class="form-label" style="font-size:0.95rem;">Prix unitaire (€)</label>
-                  <input type="number" class="form-control form-control-sm" min="0" step="0.01" [(ngModel)]="item.unitPrice" name="unitPrice{{i}}">
+                  <input type="number" class="form-control form-control-sm" min="0" step="0.01"
+                    [(ngModel)]="item.unitPrice" name="unitPrice{{i}}">
                 </div>
                 <div class="col-12 mb-2">
                   <label class="form-label" style="font-size:0.95rem;">Quantité</label>
-                  <input type="number" class="form-control form-control-sm" min="1" required [(ngModel)]="item.quantity" name="quantity{{i}}">
+                  <input type="number" class="form-control form-control-sm" min="1" required [(ngModel)]="item.quantity"
+                    name="quantity{{i}}">
                 </div>
                 <!-- Champ caution déplacé ici -->
                 <div class="col-12 mb-2">
                   <label class="form-label" style="font-size:0.95rem;">Caution (€)</label>
-                  <input type="number" class="form-control form-control-sm" min="0" step="0.01" [(ngModel)]="item.deposit" name="deposit{{i}}">
+                  <input type="number" class="form-control form-control-sm" min="0" step="0.01"
+                    [(ngModel)]="item.deposit" name="deposit{{i}}">
                 </div>
                 <div class="col-12 d-flex justify-content-end">
-                  <button *ngIf="formData.items.length > 1" type="button" class="btn btn-outline-danger btn-sm" (click)="removeItem(i)" title="Supprimer cet article">
+                  <button *ngIf="formData.items.length > 1" type="button" class="btn btn-outline-danger btn-sm"
+                    style="border-color: #eebbc3; color: #eebbc3;" (click)="removeItem(i)"
+                    title="Supprimer cet article">
                     <span aria-hidden="true">&times;</span>
                   </button>
                 </div>
               </div>
             </div>
             <div class="mb-3">
-              <button type="button" class="btn btn-outline-primary" (click)="addItem()">
+              <button type="button" class="btn btn-outline-primary" style="border-color: #eebbc3; color: #eebbc3;"
+                (click)="addItem()">
                 Ajouter un article
               </button>
             </div>
             <div class="d-flex justify-content-between">
-              <button type="button" class="btn btn-secondary" (click)="prevStep()">Précédent</button>
-              <button type="button" class="btn btn-primary" (click)="nextStep()">Suivant</button>
+              <button type="button" class="btn btn-secondary"
+                style="background-color: #c7c7c7; color: #232946; border: none;" (click)="prevStep()">Précédent</button>
+              <button type="button" class="btn btn-primary"
+                style="background-color: #eebbc3; color: #232946; border: none;" (click)="nextStep()">Suivant</button>
             </div>
           </div>
           }
           <!-- Étape 3 : Paiement, retour et caution -->
           @if (step === 3) {
           <div id="step3">
-            <h5 class="mb-3">3. Paiement et retour</h5>
+            <h5 class="mb-3" style="color: #eebbc3;">3. Paiement et retour</h5>
             <!-- Bouton Précédent en haut à gauche, plus petit -->
             <div class="mb-2">
-              <button type="button" class="btn btn-secondary btn-sm" style="font-size:0.95rem;" (click)="prevStep()">Précédent</button>
+              <button type="button" class="btn btn-secondary btn-sm"
+                style="background-color: #c7c7c7; color: #232946; border: none;" (click)="prevStep()">Précédent</button>
             </div>
             <div class="mb-3">
               <label for="advance" class="form-label">Avance perçue (€)</label>
-              <input type="number" id="advance" name="advance" class="form-control" min="0" step="0.01" [(ngModel)]="formData.advance" placeholder="Ex: 50">
+              <input type="number" id="advance" name="advance" class="form-control" min="0" step="0.01"
+                [(ngModel)]="formData.advance" placeholder="Ex: 50">
             </div>
             <div class="mb-3">
               <label for="returnStatus" class="form-label">Retour effectué</label>
@@ -119,23 +199,25 @@
             </div> -->
             <!-- Boutons Enregistrer et Mettre à jour, centrés et police réduite -->
             <div class="d-flex justify-content-center gap-2 mt-3">
-              <button type="submit" class="btn btn-primary btn-lg" [disabled]="isSubmitting" style="font-size:1rem;">
+              <button type="submit" class="btn btn-primary btn-lg" [disabled]="isSubmitting"
+                style="background-color: #eebbc3; color: #232946; border: none; font-size:1rem;">
                 @if (isSubmitting) {
-                  <output class="spinner-border spinner-border-sm me-2" aria-hidden="true"></output>
+                <output class="spinner-border spinner-border-sm me-2" aria-hidden="true"></output>
                 }
                 {{ isSubmitting ? 'Enregistrement...' : 'Enregistrer la demande' }}
               </button>
-              <button *ngIf="selectedDemande" class="btn btn-warning btn-lg" type="button" (click)="updateSelectedDemande()" style="font-size:1rem;">
+              <button *ngIf="selectedDemande" class="btn btn-warning btn-lg" type="button"
+                (click)="updateSelectedDemande()"
+                style="background-color: #f9d949; color: #232946; border: none; font-size:1rem;">
                 Mettre à jour
               </button>
             </div>
             <!-- Message de feedback -->
             @if (submitMessage) {
-              <div class="mt-3 alert" 
-                   [class.alert-success]="submitMessage.includes('succès')" 
-                   [class.alert-danger]="!submitMessage.includes('succès')">
-                {{ submitMessage }}
-              </div>
+            <div class="mt-3 alert" [class.alert-success]="submitMessage.includes('succès')"
+              [class.alert-danger]="!submitMessage.includes('succès')">
+              {{ submitMessage }}
+            </div>
             }
           </div>
           }
@@ -144,125 +226,142 @@
     </div>
   </div>
   <!-- Barre verticale de séparation -->
-  <div class="border-end border-2 mx-2" style="height:100vh;"></div>
+  <div class="border-end border-2 mx-2" style="height:100vh; border-color: #394867 !important;"></div>
   <!-- Bloc droit (70%) -->
   <div class="ps-4" style="width:85%;">
     <!-- Onglets dashboard -->
     <ul class="nav nav-tabs mb-3" id="dashboardTabs" role="tablist"
-        style="position:sticky; top:0; background:#f8f9fa; z-index:1030;">
+      style="position:sticky; top:0; background:#232946; z-index:1030; border-radius: 0.5rem;">
       <li class="nav-item" role="presentation">
-        <button
-          class="nav-link"
-          [class.active]="activeTab === 'exploitation'"
-          [class.btn]="activeTab === 'exploitation'"
-          [class.btn-primary]="activeTab === 'exploitation'"
-          id="exploitation-tab"
-          (click)="activeTab = 'exploitation'"
-          data-bs-toggle="tab"
-          data-bs-target="#exploitation"
-          type="button"
-          role="tab"
-          aria-controls="exploitation"
-          [attr.aria-selected]="activeTab === 'exploitation'">
+        <button class="nav-link" [class.active]="activeTab === 'exploitation'"
+          [class.btn]="activeTab === 'exploitation'" [class.btn-primary]="activeTab === 'exploitation'"
+          id="exploitation-tab" (click)="activeTab = 'exploitation'" data-bs-toggle="tab" data-bs-target="#exploitation"
+          type="button" role="tab" aria-controls="exploitation" [attr.aria-selected]="activeTab === 'exploitation'"
+          style="background-color: #394867; color: #eebbc3; border: none;">
           Exploitation
         </button>
       </li>
       <li class="nav-item" role="presentation">
-        <button
-          class="nav-link"
-          [class.active]="activeTab === 'dashboard'"
-          [class.btn]="activeTab === 'dashboard'"
-          [class.btn-primary]="activeTab === 'dashboard'"
-          id="dashboard-tab"
-          (click)="activeTab = 'dashboard'"
-          data-bs-toggle="tab"
-          data-bs-target="#dashboard"
-          type="button"
-          role="tab"
-          aria-controls="dashboard"
-          [attr.aria-selected]="activeTab === 'dashboard'">
+        <button class="nav-link" [class.active]="activeTab === 'dashboard'" [class.btn]="activeTab === 'dashboard'"
+          [class.btn-primary]="activeTab === 'dashboard'" id="dashboard-tab" (click)="activeTab = 'dashboard'"
+          data-bs-toggle="tab" data-bs-target="#dashboard" type="button" role="tab" aria-controls="dashboard"
+          [attr.aria-selected]="activeTab === 'dashboard'"
+          style="background-color: #394867; color: #eebbc3; border: none;">
           Dashboard
         </button>
       </li>
     </ul>
-
-    <div class="tab-content" id="dashboardTabsContent">
+    <div class="tab-content" id="dashboardTabsContent" style="background-color: #fff; border-radius: 1rem;">
       <!-- Onglet EXPLOITATION -->
-      <div class="tab-pane fade"
-           [class.show]="activeTab === 'exploitation'"
-           [class.active]="activeTab === 'exploitation'"
-           id="exploitation"
-           role="tabpanel"
-           aria-labelledby="exploitation-tab">
+      <div class="tab-pane fade" [class.show]="activeTab === 'exploitation'"
+        [class.active]="activeTab === 'exploitation'" id="exploitation" role="tabpanel"
+        aria-labelledby="exploitation-tab" style="background-color: #f7f7f7; border-radius: 1rem;">
         <div class="container-fluid py-3">
-          <h4 class="mb-4 text-primary">Toutes les demandes enregistrées</h4>
+          <h4 class="mb-4" style="color: #232946;">Toutes les demandes enregistrées</h4>
           <!-- Pagination info -->
           <div class="d-flex justify-content-between align-items-center mb-2">
             <div>
-              Page {{ currentPage }} sur {{ totalPages }} 
+              Page {{ currentPage }} sur {{ totalPages }}
               ({{ paginatedDemandes.length }} affichées sur {{ allDemandes.length }})
             </div>
             <div>
             </div>
-          <!-- Actions pour la ligne sélectionnée -->
-          <div *ngIf="selectedDemande" class="mb-3 d-flex gap-2 align-items-center">
-            <span class="fw-bold text-primary">Action sur la sélection :</span>
-            <!-- Avoid deletion for now. feature will be reactivated later. need to define retoration strategy first -->
-            <!-- <button class="btn btn-danger btn-sm" (click)="deleteSelectedDemande()" type="button">
+            <!-- Actions pour la ligne sélectionnée -->
+            <div *ngIf="selectedDemande" class="mb-3 d-flex gap-2 align-items-center">
+              <span class="fw-bold text-primary">Action sur la sélection :</span>
+              <!-- Avoid deletion for now. feature will be reactivated later. need to define retoration strategy first -->
+              <!-- <button class="btn btn-danger btn-sm" (click)="deleteSelectedDemande()" type="button">
               Supprimer
             </button> -->
-            <!-- Le bouton "Mettre à jour" a été déplacé à côté du bouton "Enregistrer la demande" dans le formulaire -->
-            <button class="btn btn-secondary btn-sm" (click)="selectedDemande = null" type="button">
-              Annuler
-            </button>
-            <!-- Nouveau bouton Message récapitulatif -->
-            <button class="btn btn-info btn-sm" type="button" (click)="showRecap = true">
-              Message récapitulatif
-            </button>
-          </div>
+              <!-- Le bouton "Mettre à jour" a été déplacé à côté du bouton "Enregistrer la demande" dans le formulaire -->
+              <button class="btn btn-secondary btn-sm" (click)="selectedDemande = null" type="button">
+                Annuler
+              </button>
+              <!-- Nouveau bouton Message récapitulatif -->
+              <button class="btn btn-info btn-sm" type="button" (click)="showRecap = true">
+                Message récapitulatif
+              </button>
+            </div>
 
-          <!-- Fenêtre modale simple pour le message récapitulatif -->
-          <div *ngIf="showRecap" class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,0.2);">
-            <div class="modal-dialog modal-dialog-centered">
-              <div class="modal-content">
-                <div class="modal-header py-2">
-                  <h6 class="modal-title">Message récapitulatif pour le client</h6>
-                  <button type="button" class="btn-close" (click)="showRecap = false"></button>
-                </div>
+            <!-- Fenêtre modale simple pour le message récapitulatif -->
+            <div *ngIf="showRecap" class="modal d-block" tabindex="-1" style="background:rgba(0,0,0,0.2);">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header py-2">
+                    <h6 class="modal-title">Message récapitulatif pour le client</h6>
+                    <button type="button" class="btn-close" (click)="showRecap = false"></button>
+                  </div>
 
-                <div class="modal-body">
-                  <textarea class="form-control" rows="10" readonly>{{ getRecapMessage(selectedDemande) }}</textarea>
-                </div>
+                  <div class="modal-body">
+                    <textarea class="form-control" rows="10" readonly>{{ getRecapMessage(selectedDemande) }}</textarea>
+                  </div>
 
-                <div class="modal-footer py-2">
-                  <button type="button" class="btn btn-secondary btn-sm" (click)="showRecap = false">Fermer</button>
+                  <div class="modal-footer py-2">
+                    <button type="button" class="btn btn-secondary btn-sm" (click)="showRecap = false">Fermer</button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
           </div>
-          
-          <table class="table table-bordered table-striped">
-            <thead>
+
+          <table class="table table-bordered table-striped" style="background-color: #fff;">
+            <thead style="background-color: #394867; color: #fff;">
               <tr>
-                <th>Date de contact</th>
+                <th>Status</th>
+                <th>Contact</th>
                 <th>Client</th>
-                <th>Date de livraison</th>
+                <th>Livraison</th>
                 <th>Plateforme</th>
                 <th>Téléphone</th>
-                <th>Avance percue (€)</th>
-                <th>Montant total (€)</th>
+                <th>Acompte (€)</th>
+                <th>Total (€)</th>
                 <!-- <th>Statut retour</th> -->
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let demande of paginatedDemandes"
-                  [class.table-primary]="isDeliverySoon(demande.deliveryDate)"
-                  [class.table-active]="selectedDemande && selectedDemande.id === demande.id"
-                  [ngStyle]="selectedDemande && selectedDemande.id === demande.id ? {'background-color': '#ffcc00', 'border-left': '5px solid #ffcc00'} : {}"
-                  style="cursor:pointer"
-                  (click)="onSelectDemande(demande)">
+              <tr *ngFor="let demande of paginatedDemandes" [class.table-primary]="isDeliverySoon(demande.deliveryDate)"
+                [class.table-active]="selectedDemande && selectedDemande.id === demande.id"
+                [ngStyle]="selectedDemande && selectedDemande.id === demande.id ? {'background-color': '#ffcc00', 'border-left': '5px solid #ffcc00'} : {}"
+                style="cursor:pointer" (click)="onSelectDemande(demande)">
+                <td>
+                  <span class="status-display">
+                    <ng-container [ngSwitch]="demande.status">
+                      <span *ngSwitchCase="'INIT'">
+                        <i class="bi bi-hourglass-split" style="color:#888;"></i>
+                        <span class="status-text status-init">Init</span>
+                      </span>
+                      <span *ngSwitchCase="'PENDING'">
+                        <i class="bi bi-clock" style="color:#f9d949;"></i>
+                        <span class="status-text status-pending">En attente</span>
+                      </span>
+                      <span *ngSwitchCase="'CONFIRMED'">
+                        <i class="bi bi-check2-circle" style="color:#394867;"></i>
+                        <span class="status-text status-confirmed">Confirmée</span>
+                      </span>
+                      <span *ngSwitchCase="'DELIVERED'">
+                        <i class="bi bi-truck" style="color:#232946;"></i>
+                        <span class="status-text status-delivered">Livrée</span>
+                      </span>
+                      <span *ngSwitchCase="'RETURNED'">
+                        <i class="bi bi-arrow-return-left" style="color:#4caf50;"></i>
+                        <span class="status-text status-returned">Restituée</span>
+                      </span>
+                      <span *ngSwitchCase="'ARCHIVED'">
+                        <i class="bi bi-archive" style="color:#888;"></i>
+                        <span class="status-text status-archived">Archivée</span>
+                      </span>
+                      <span *ngSwitchCase="'CANCELLED'">
+                        <i class="bi bi-x-circle" style="color:#e74c3c;"></i>
+                        <span class="status-text status-cancelled">Annulée</span>
+                      </span>
+                      <span *ngSwitchDefault>
+                        <i class="bi bi-question-circle" style="color:#888;"></i>
+                        <span class="status-text">-</span>
+                      </span>
+                    </ng-container>
+                  </span>
+                </td>
                 <td>{{ demande.contactDate | date:'yyyy-MM-dd' }}</td>
                 <td>{{ demande.clientName }}</td>
                 <td>{{ demande.deliveryDate | date:'yyyy-MM-dd' }}</td>
@@ -270,62 +369,47 @@
                 <td>{{ demande.phone }}</td>
                 <td>{{ demande.advance }} €</td>
                 <td>
-                    {{ getTotalAmount(demande) || '0' }} €
-                </td>               
+                  {{ getTotalAmount(demande) || '0' }} €
+                </td>
               </tr>
               <tr *ngIf="paginatedDemandes.length === 0">
                 <td colspan="8" class="text-center text-muted">Aucune demande enregistrée</td>
               </tr>
             </tbody>
           </table>
-            <div class="d-flex align-items-center gap-2">
-              <button class="btn btn-outline-primary btn-sm me-1"
-                      (click)="prevPage()"
-                      [disabled]="currentPage === 1">
-                Précédent
-              </button>
-              <button class="btn btn-outline-primary btn-sm"
-                      (click)="nextPage()"
-                      [disabled]="currentPage === totalPages">
-                Suivant
-              </button>
-            </div>
+          <div class="d-flex align-items-center gap-2">
+            <button class="btn btn-outline-primary btn-sm me-1" style="border-color: #eebbc3; color: #eebbc3;"
+              (click)="prevPage()" [disabled]="currentPage === 1">
+              Précédent
+            </button>
+            <button class="btn btn-outline-primary btn-sm" style="border-color: #eebbc3; color: #eebbc3;"
+              (click)="nextPage()" [disabled]="currentPage === totalPages">
+              Suivant
+            </button>
+          </div>
         </div>
-        
+
         <!-- Section détail exhaustif de la demande sélectionnée -->
         @if (selectedDemande) {
-          <hr>
-          <div class="container-fluid py-3">
-            <h5 class="mb-3 text-secondary">Détail de la demande sélectionnée</h5>
-            <div class="row mb-2">
-              <div class="col-md-4"><strong>Nom du client :</strong> {{ selectedDemande.clientName }}</div>
-              <div class="col-md-4"><strong>Téléphone :</strong> {{ selectedDemande.phone }}</div>
-              <div class="col-md-4"><strong>Plateforme :</strong> {{ selectedDemande.platform }}</div>
-            </div>
-            <div class="row mb-2">
-              <div class="col-md-4"><strong>Date de contact :</strong> {{ selectedDemande.contactDate | date:'yyyy-MM-dd' }}</div>
-              <div class="col-md-4"><strong>Date de livraison :</strong> {{ selectedDemande.deliveryDate | date:'yyyy-MM-dd' }}</div>
-              <div class="col-md-4"><strong>Caution :</strong> {{ selectedDemande.deposit }} €</div>
-            </div>
-            <div class="row mb-2">
-              <div class="col-md-4">
-                <strong>Montant total de la commande :</strong>
-                {{ getTotalAmount(selectedDemande) }} €
-              </div>
-              <div class="col-md-4"><strong>Avance perçue :</strong> {{ selectedDemande.advance }} €</div>
-              <div class="col-md-4"><strong>Reste à régler :</strong> {{ getReste(selectedDemande) }} €</div>
-            </div>
-            <div class="row mb-2">
-              <div class="col-md-4"><strong>Retour effectué : </strong>
-                <span *ngIf="selectedDemande.returnStatus === 'oui'" class="badge bg-success"> Oui </span>
-                <span *ngIf="selectedDemande.returnStatus === 'non'" class="badge bg-danger"> Non </span>
-                <span *ngIf="!selectedDemande.returnStatus" class="badge bg-secondary">-</span>
-              </div>
-            </div>
-            <div class="mb-2">
+        <hr>
+        <div class="container-fluid py-3">
+          <div class="row mb-2">
+            <!-- #detail-block1 Main details block -->
+            <div class="col-md-8">
+              <h5 class="mb-3" style="color: #eebbc3;">Détail de la demande sélectionnée</h5>
+              <div class="mb-3"><select class="form-select form-select-sm d-inline-block w-auto"
+                  [(ngModel)]="selectedDemande.status" (change)="onStatusChange(selectedDemande)">
+                  <option value="INIT">Init</option>
+                  <option value="PENDING">En attente</option>
+                  <option value="CONFIRMED">Confirmée</option>
+                  <option value="DELIVERED">Livrée</option>
+                  <option value="RETURNED">Restituée</option>
+                  <option value="ARCHIVED">Archivée</option>
+                  <option value="CANCELLED">Annulée</option>
+                </select></div>
               <strong>Articles commandés :</strong>
-              <table class="table table-sm table-bordered mt-2">
-                <thead>
+              <table class="table table-sm table-bordered mt-2" style="background-color: #fff;">
+                <thead style="background-color: #394867; color: #fff;">
                   <tr>
                     <th>Article</th>
                     <th>Prix unitaire (€)</th>
@@ -342,29 +426,49 @@
                   </tr>
                 </tbody>
               </table>
+              <div><strong>Nom du client :</strong> {{ selectedDemande.clientName }}</div>
+              <div><strong>Téléphone :</strong> {{ selectedDemande.phone }}</div>
+              <div><strong>Plateforme :</strong> {{ selectedDemande.platform }}</div>
+              <div><strong>Date de contact :</strong> {{ selectedDemande.contactDate |
+                date:'yyyy-MM-dd' }}</div>
+              <div><strong>Date de livraison :</strong> {{ selectedDemande.deliveryDate |
+                date:'yyyy-MM-dd' }}</div>
+              <div><strong>Caution :</strong> {{ selectedDemande.deposit }} €</div>
+              <div><strong>Montant total de la commande :</strong>
+                {{ getTotalAmount(selectedDemande) }} €
+              </div>
+              <div><strong>Avance perçue :</strong> {{ selectedDemande.advance }} €</div>
+              <div><strong>Reste à régler :</strong> {{ getReste(selectedDemande) }} €</div>
             </div>
-            <div class="col-md-6"><strong>Commentaires :</strong> {{ selectedDemande.comments }}</div>
+            
+            <!-- Barre verticale de séparation -->
+            <div class="col-md-1 d-flex justify-content-center align-items-stretch">
+              <div style="border-left: 2px solid #394867; height: 100%;"></div>
+            </div>
+            
+            <!-- #detail-block2 Commentaires -->
+            <div class="col-md-3">
+              <h5 class="mb-3" style="color: #eebbc3;">Commentaires :</h5>
+              {{ selectedDemande.comments }}
+            </div>
           </div>
+        </div>
 
-          <!-- Ajout d'un espace vertical supplémentaire -->
-          <div style="height: 0.75rem;"></div>
-
-
+        <!-- Ajout d'un espace vertical supplémentaire -->
+        <div style="height: 0.75rem;"></div>
         }
       </div>
 
 
       <!-- Nouvel onglet DASHBOARD -->
-      <div class="tab-pane fade"
-           [class.show]="activeTab === 'dashboard'"
-           [class.active]="activeTab === 'dashboard'"
-           id="dashboard"
-           role="tabpanel"
-           aria-labelledby="dashboard-tab">
+      <div class="tab-pane fade" [class.show]="activeTab === 'dashboard'" [class.active]="activeTab === 'dashboard'"
+        id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab"
+        style="background-color: #f7f7f7; border-radius: 1rem;">
         <div class="container-fluid py-3">
-          <h4 class="mb-4 text-primary">Dashboard</h4>
+          <h4 class="mb-4" style="color: #232946;">Dashboard</h4>
           <!-- Ajoute ici le contenu du dashboard -->
-          <div class="alert alert-info">Contenu du dashboard à compléter.</div>
+          <div class="alert alert-info" style="background-color: #eebbc3; color: #232946;">Contenu du dashboard à
+            compléter.</div>
         </div>
       </div>
     </div>

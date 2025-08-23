@@ -18,6 +18,44 @@ if (!fs.existsSync(dataDir)) {
   fs.mkdirSync(dataDir);
 }
 
+// Helper pour déterminer le prochain statut automatiquement
+function computeNextStatus(demande, updatedData = {}) {
+  // Priorité à la modification manuelle
+  if (updatedData.status) return updatedData.status;
+
+  // INIT -> PENDING si articles/dates ajoutés
+  if ((demande.status === 'INIT' || !demande.status) &&
+      updatedData.items && updatedData.items.length > 0 &&
+      updatedData.deliveryDate) {
+    return 'PENDING';
+  }
+  // PENDING -> CONFIRMED si avance > 0
+  if (demande.status === 'PENDING' &&
+      ((updatedData.advance && updatedData.advance > 0) || (demande.advance && demande.advance > 0))) {
+    return 'CONFIRMED';
+  }
+  // CONFIRMED -> DELIVERED si livraison effectuée
+  if (demande.status === 'CONFIRMED' &&
+      ((updatedData.deliveryDate && updatedData.deliveryDate !== demande.deliveryDate) || updatedData.isDelivered)) {
+    return 'DELIVERED';
+  }
+  // DELIVERED -> RETURNED si retour effectué
+  if (demande.status === 'DELIVERED' &&
+      (updatedData.returnStatus === 'oui' || demande.returnStatus === 'oui')) {
+    return 'RETURNED';
+  }
+  // RETURNED -> ARCHIVED si retour confirmé
+  if (demande.status === 'RETURNED' &&
+      (updatedData.returnStatus === 'oui' || demande.returnStatus === 'oui')) {
+    return 'ARCHIVED';
+  }
+  // Annulation explicite
+  if (updatedData.status === 'CANCELLED') return 'CANCELLED';
+
+  // Sinon, garder le statut actuel
+  return demande.status || 'INIT';
+}
+
 // Route pour enregistrer une demande de location
 app.post('/api/demandes', (req, res) => {
   try {
@@ -159,7 +197,7 @@ app.get('/api/demandes/:id', (req, res) => {
   }
 });
 
-// Mettre à jour une demande existante
+// Mettre à jour une demande existante (PUT)
 app.put('/api/demandes/:id', (req, res) => {
   try {
     const { id } = req.params;
@@ -174,11 +212,37 @@ app.put('/api/demandes/:id', (req, res) => {
     if (idx === -1) {
       return res.status(404).json({ success: false, message: 'Demande non trouvée' });
     }
-    demandes[idx] = { ...demandes[idx], ...updatedData, id }; // conserve l'id
+    // Automatisation du statut
+    const demandeAvant = demandes[idx];
+    const nextStatus = computeNextStatus(demandeAvant, updatedData);
+    demandes[idx] = { ...demandeAvant, ...updatedData, id, status: nextStatus };
     fs.writeFileSync(allDemandesPath, JSON.stringify(demandes, null, 2));
-    res.json({ success: true, message: 'Demande mise à jour' });
+    res.json({ success: true, message: 'Demande mise à jour', status: nextStatus });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Erreur lors de la mise à jour', error: error.message });
+  }
+});
+
+// PATCH pour modifier uniquement le statut manuellement
+app.patch('/api/demandes/:id', (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+    const allDemandesPath = path.join(dataDir, 'toutes_demandes.json');
+    if (!fs.existsSync(allDemandesPath)) {
+      return res.status(404).json({ success: false, message: 'Aucune demande trouvée' });
+    }
+    const data = fs.readFileSync(allDemandesPath, 'utf8');
+    let demandes = JSON.parse(data);
+    const idx = demandes.findIndex(d => d.id === id);
+    if (idx === -1) {
+      return res.status(404).json({ success: false, message: 'Demande non trouvée' });
+    }
+    demandes[idx].status = status;
+    fs.writeFileSync(allDemandesPath, JSON.stringify(demandes, null, 2));
+    res.json({ success: true, message: 'Statut mis à jour', status });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Erreur lors de la mise à jour du statut', error: error.message });
   }
 });
 

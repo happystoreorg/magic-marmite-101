@@ -414,5 +414,16 @@ Cordialement.
     return d.toISOString().slice(0, 10);
   }
 
-  // ...existing code...
+  onStatusChange(demande: any) {
+    if (!demande?.id || !demande?.status) return;
+    this.http.patch(`${this.apiEndpoint}/demandes/${demande.id}`, { status: demande.status }).subscribe({
+      next: () => {
+        // Optionnel : feedback ou refresh
+        this.refreshAllTabs();
+      },
+      error: (err) => {
+        alert('Erreur lors du changement de statut : ' + (err?.message || ''));
+      }
+    });
+  }
 }
