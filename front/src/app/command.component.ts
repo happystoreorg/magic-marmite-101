@@ -39,12 +39,16 @@ export class CommandComponent implements OnInit {
   step = 1;
   activeTab = 'exploitation'; // Onglet actif par défaut
 
-  // Utilisation dynamique de l'URL API selon l'environnement
+  // Replace or update the API URL
   private readonly apiUrl = 'http://localhost:3001/api';
   private readonly apiUrlCible = 'http://makepe.freeboxos.fr:32769/api';
 
   get apiEndpoint(): string {
-    return this.apiUrlCible; // Utilise l'URL définie dans environment.ts ou environment.prod.ts
+    const endpoint = window.location.hostname === 'localhost' 
+      ? this.apiUrl 
+      : this.apiUrlCible;
+    console.log('Using API endpoint:', endpoint);
+    return endpoint;
   }
 
   // Objet pour stocker les données du formulaire
@@ -421,28 +425,39 @@ Cordialement.
   }
 
   onStatusChange(demande: any) {
-    console.log('Updating status for demande:', demande.id, 'to:', demande.status);
-    console.log('API Endpoint:', `${this.apiEndpoint}/demandes/${demande.id}`);
-
-    if (!demande?.id || !demande?.status) {
-      console.error('Invalid demande or status');
+    console.log('Updating status for demande:', demande);
+    
+    if (!demande?.id) {
+      console.error('Missing demande ID');
       return;
     }
 
-    this.http.patch(`${this.apiEndpoint}/demandes/${demande.id}`, { status: demande.status })
-      .subscribe({
-        next: (response) => {
-          console.log('Status update success:', response);
-          this.refreshAllTabs();
-        },
-        error: (err) => {
-          console.error('Status update error:', err);
-          console.error('Request details:', {
-            url: `${this.apiEndpoint}/demandes/${demande.id}`,
-            body: { status: demande.status }
-          });
-          alert('Erreur lors du changement de statut : ' + (err?.error?.message || err?.message || err));
-        }
-      });
+    const url = `${this.apiEndpoint}/demandes/${demande.id}`;
+    console.log('PATCH request to:', url);
+    
+    this.http.patch(url, { status: demande.status }, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
+    }).subscribe({
+      next: (response: any) => {
+        console.log('Status update success:', response);
+        this.refreshAllTabs();
+      },
+      error: (err) => {
+        console.error('Status update error:', err);
+        console.error('Request details:', {
+          url,
+          method: 'PATCH',
+          body: { status: demande.status },
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }
+        });
+        alert(`Erreur lors du changement de statut : ${err.error?.message || err.message || 'Unknown error'}`);
+      }
+    });
   }
 }
