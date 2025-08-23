@@ -63,7 +63,7 @@
   }
 </style>
 
-<div class="d-flex min-vh-100 px-4" style="font-size: 0.95rem; background-color: #f0f2f5;">
+<div class="d-flex min-vh-100 px-4" style="font-size: 0.76rem; background-color: #f0f2f5;">
   <!-- Bloc gauche (30%) -->
   <div class="d-flex flex-column align-items-start justify-content-start pe-4"
     style="width:15%; min-width:300px; position:sticky; top:0; align-self: flex-start; z-index: 1020;">
@@ -426,19 +426,19 @@
                   </tr>
                 </tbody>
               </table>
+              <div><strong>Plateforme :</strong> {{ selectedDemande.platform }}</div>
               <div><strong>Nom du client :</strong> {{ selectedDemande.clientName }}</div>
               <div><strong>Téléphone :</strong> {{ selectedDemande.phone }}</div>
-              <div><strong>Plateforme :</strong> {{ selectedDemande.platform }}</div>
               <div><strong>Date de contact :</strong> {{ selectedDemande.contactDate |
                 date:'yyyy-MM-dd' }}</div>
               <div><strong>Date de livraison :</strong> {{ selectedDemande.deliveryDate |
                 date:'yyyy-MM-dd' }}</div>
-              <div><strong>Caution :</strong> {{ selectedDemande.deposit }} €</div>
               <div><strong>Montant total de la commande :</strong>
                 {{ getTotalAmount(selectedDemande) }} €
               </div>
               <div><strong>Avance perçue :</strong> {{ selectedDemande.advance }} €</div>
               <div><strong>Reste à régler :</strong> {{ getReste(selectedDemande) }} €</div>
+              <div><strong>Caution :</strong> {{ selectedDemande.deposit }} €</div>
             </div>
             
             <!-- Barre verticale de séparation -->
