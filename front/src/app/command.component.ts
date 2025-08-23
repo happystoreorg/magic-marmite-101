@@ -421,16 +421,28 @@ Cordialement.
   }
 
   onStatusChange(demande: any) {
-    if (!demande?.id || !demande?.status) return;
-    this.http.patch(`${this.apiEndpoint}/demandes/${demande.id}`, { status: demande.status }).subscribe({
-      next: () => {
-        // Optionnel : feedback ou refresh
-        console.log('Statut (etat) de la demande mis à jour avec succès');
-        this.refreshAllTabs();
-      },
-      error: (err) => {
-        alert('Erreur lors du changement de statut : ' + (err?.message || ''));
-      }
-    });
+    console.log('Updating status for demande:', demande.id, 'to:', demande.status);
+    console.log('API Endpoint:', `${this.apiEndpoint}/demandes/${demande.id}`);
+
+    if (!demande?.id || !demande?.status) {
+      console.error('Invalid demande or status');
+      return;
+    }
+
+    this.http.patch(`${this.apiEndpoint}/demandes/${demande.id}`, { status: demande.status })
+      .subscribe({
+        next: (response) => {
+          console.log('Status update success:', response);
+          this.refreshAllTabs();
+        },
+        error: (err) => {
+          console.error('Status update error:', err);
+          console.error('Request details:', {
+            url: `${this.apiEndpoint}/demandes/${demande.id}`,
+            body: { status: demande.status }
+          });
+          alert('Erreur lors du changement de statut : ' + (err?.error?.message || err?.message || err));
+        }
+      });
   }
 }

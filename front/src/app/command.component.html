@@ -339,9 +339,9 @@
             <div *ngIf="selectedDemande" class="mb-3 d-flex gap-2 align-items-center">
               <span class="fw-bold text-primary">Action sur la sélection :</span>
               <!-- Avoid deletion for now. feature will be reactivated later. need to define retoration strategy first -->
-              <!-- <button class="btn btn-danger btn-sm" (click)="deleteSelectedDemande()" type="button">
+              <button class="btn btn-danger btn-sm" (click)="deleteSelectedDemande()" type="button">
               Supprimer
-            </button> -->
+            </button> 
               <!-- Le bouton "Mettre à jour" a été déplacé à côté du bouton "Enregistrer la demande" dans le formulaire -->
               <button class="btn btn-secondary btn-sm" (click)="selectedDemande = null" type="button">
                 Annuler

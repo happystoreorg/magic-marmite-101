@@ -225,25 +225,33 @@ app.put('/api/demandes/:id', (req, res) => {
 
 // PATCH pour modifier uniquement le statut manuellement
 app.patch('/api/demandes/:id', (req, res) => {
+  console.log('PATCH /api/demandes/:id called', req.params, req.body); // Ajout log d'entrée
   try {
     const { id } = req.params;
     const { status } = req.body;
     const allDemandesPath = path.join(dataDir, 'toutes_demandes.json');
     if (!fs.existsSync(allDemandesPath)) {
+      console.log('Fichier toutes_demandes.json non trouvé');
       return res.status(404).json({ success: false, message: 'Aucune demande trouvée' });
     }
     const data = fs.readFileSync(allDemandesPath, 'utf8');
     let demandes = JSON.parse(data);
-    const idx = demandes.findIndex(d => d.id === id);
+
+    // Log IDs for debug
+    const allIds = demandes.map(d => d.id);
+    console.log('IDs présents:', allIds);
+
+    const idx = demandes.findIndex(d => String(d.id) === String(id));
     if (idx === -1) {
-      return res.status(404).json({ success: false, message: 'Demande non trouvée' });
+      console.error(`Demande non trouvée pour id=${id}`);
+      return res.status(404).json({ success: false, message: `Demande non trouvée pour id=${id}` });
     }
     demandes[idx].status = status;
     fs.writeFileSync(allDemandesPath, JSON.stringify(demandes, null, 2));
     res.json({ success: true, message: 'Statut mis à jour', status });
     console.log('Statut (etat) de la demande mis à jour avec succès');
-
   } catch (error) {
+    console.error('Erreur inattendue PATCH /api/demandes/:id', error); // Ajout log d'erreur
     res.status(500).json({ success: false, message: 'Erreur lors de la mise à jour du statut', error: error.message });
   }
 });
