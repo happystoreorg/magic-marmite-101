@@ -64,8 +64,10 @@
 
   /* Responsive: mobile layout */
   @media (max-width: 768px) {
-    body, .main-flex {
-      font-size: calc(0.76rem - 3px) !important;
+
+    body,
+    .main-flex {
+      font-size: calc(0.76rem) !important;
     }
 
     .main-flex {
@@ -86,11 +88,13 @@
       top: unset !important;
       z-index: unset !important;
       align-self: unset !important;
-      margin-top: 2rem !important; /* Ajoute un espace au-dessus du bloc gauche */
+      margin-top: 2rem !important;
+      /* Ajoute un espace au-dessus du bloc gauche */
     }
 
     .bloc-droite {
-      margin-bottom: 0.25rem !important; /* Ajoute un espace sous le bloc droit */
+      margin-bottom: 0.25rem !important;
+      /* Ajoute un espace sous le bloc droit */
     }
 
     .card {
@@ -214,14 +218,14 @@
             <div>
             </div>
             <!-- Actions pour la ligne sélectionnée -->
-            <div *ngIf="selectedDemande"
-                 class="mb-12 d-flex gap-1 align-items-center action-buttons-mobile">
-                 
-              <span class="fw-bold text-primary" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Action sur la sélection :</span>
+            <div *ngIf="selectedDemande" class="mb-12 d-flex gap-1 align-items-center action-buttons-mobile">
+
+              <span class="fw-bold text-primary"
+                style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Action sur la sélection :</span>
               <!-- Avoid deletion for now. feature will be reactivated later. need to define retoration strategy first -->
               <button class="btn btn-danger btn-sm" (click)="deleteSelectedDemande()" type="button">
                 Supprimer
-              </button> 
+              </button>
               <!-- Le bouton "Mettre à jour" a été déplacé à côté du bouton "Enregistrer la demande" dans le formulaire -->
               <button class="btn btn-secondary btn-sm" (click)="selectedDemande = null" type="button">
                 Annuler
@@ -271,7 +275,8 @@
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let demande of paginatedDemandes" [class.table-primary]="isDeliverySoon(demande.deliveryDate)"
+                <tr *ngFor="let demande of paginatedDemandes"
+                  [class.table-primary]="isDeliverySoon(demande.deliveryDate)"
                   [class.table-active]="selectedDemande && selectedDemande.id === demande.id"
                   [ngStyle]="selectedDemande && selectedDemande.id === demande.id ? {'background-color': '#ffcc00', 'border-left': '5px solid #ffcc00'} : {}"
                   style="cursor:pointer" (click)="onSelectDemande(demande)">
@@ -362,24 +367,30 @@
                   <option value="CANCELLED">Annulée</option>
                 </select></div>
               <strong>Articles commandés :</strong>
-              <table class="table table-sm table-bordered mt-2" style="background-color: #fff;">
-                <thead style="background-color: #394867; color: #fff;">
-                  <tr>
-                    <th>Article</th>
-                    <th>Prix unitaire (€)</th>
-                    <th>Quantité</th>
-                    <th>Total (€)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let item of selectedDemande.items">
-                    <td>{{ item.article }}</td>
-                    <td>{{ item.unitPrice }}</td>
-                    <td>{{ item.quantity }}</td>
-                    <td>{{ (item.unitPrice * item.quantity) }}</td>
-                  </tr>
-                </tbody>
-              </table>
+              <div class=table-responsive-mobile>
+
+                <table class="table table-sm table-bordered mt-2 table-bordered table-striped"
+                  style="background-color: #fff;">
+                  <thead style="background-color: #394867; color: #fff;">
+                    <tr>
+                      <th>Article</th>
+                      <th>Prix unitaire (€)</th>
+                      <th>Quantité</th>
+                      <th>Total (€)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of selectedDemande.items">
+                      <td>{{ item.article }}</td>
+                      <td>{{ item.unitPrice }}</td>
+                      <td>{{ item.quantity }}</td>
+                      <td>{{ (item.unitPrice * item.quantity) }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+
+              </div>
+
               <div><strong>Plateforme :</strong> {{ selectedDemande.platform }}</div>
               <div><strong>Nom du client :</strong> {{ selectedDemande.clientName }}</div>
               <div><strong>Téléphone :</strong> {{ selectedDemande.phone }}</div>
@@ -394,12 +405,12 @@
               <div><strong>Reste à régler :</strong> {{ getReste(selectedDemande) }} €</div>
               <div><strong>Caution :</strong> {{ selectedDemande.deposit }} €</div>
             </div>
-            
+
             <!-- Barre verticale de séparation -->
             <div class="col-md-1 d-flex justify-content-center align-items-stretch">
               <div style="border-left: 2px solid #394867; height: 100%;"></div>
             </div>
-            
+
             <!-- #detail-block2 Commentaires -->
             <div class="col-md-3">
               <h5 class="mb-3" style="color: #eebbc3;">Commentaires :</h5>

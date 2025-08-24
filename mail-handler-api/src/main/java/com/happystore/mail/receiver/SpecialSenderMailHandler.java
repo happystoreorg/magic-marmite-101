@@ -40,7 +40,7 @@ public class SpecialSenderMailHandler implements MailHandler {
             // Create DemandeDto from messageDto using DemandeMapper
             DemandeDto demandeDto = DemandeDTOMapper.fromLeboncoinMessage(messageDto);
 
-            List<DemandeDto> newDemandes = storeDemande(demandeDto);
+            storeDemande(demandeDto);
 
             // demandeRestClient.sendDemande(newDemandes);
             

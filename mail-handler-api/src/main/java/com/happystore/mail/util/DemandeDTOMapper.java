@@ -29,7 +29,7 @@ public class DemandeDTOMapper {
         demande.setClientName(msg.getSenderName());
         demande.setPlatform(msg.getRecipientName() + " | " + msg.getAdTitle());
         demande.setContactDate(LocalDateTime.now().toLocalDate().toString());
-        demande.setComments(msg.getSenderMessage());
+        demande.setComments("\n" + LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME) + " : " + msg.getSenderMessage());
         demande.setPhone(msg.getPhoneNumber());
         demande.setDeliveryDate(parseRequestedDate(msg.getRequestedDate()));
         demande.setAdvance(0); // À adapter si tu peux extraire
