@@ -143,6 +143,12 @@ export class CommandComponent implements OnInit {
     this.http.get<any[]>(`${this.apiEndpoint}/demandes`).subscribe({
       next: (data) => {
         this.allDemandes = Array.isArray(data) ? data : [];
+        // // Mise à jour du champ comments pour chaque demande
+        // this.allDemandes.forEach(demande => {
+        //   if (demande.comments && typeof demande.comments === 'string') {
+        //     demande.comments = demande.comments.replace(/\|\|\|/g, '\n');
+        //   }
+        // });
         this.allDemandes.sort((a, b) => {
           return new Date(b.contactDate).getTime() - new Date(a.contactDate).getTime();
         });
