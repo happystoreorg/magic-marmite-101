@@ -1,4 +1,8 @@
 #!/bin/sh
+# Source project-specific JAVA_HOME if available
+if [ -f "$(dirname "$0")/set-java-home.sh" ]; then
+  . "$(dirname "$0")/set-java-home.sh"
+fi
 # ----------------------------------------------------------------------------
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
